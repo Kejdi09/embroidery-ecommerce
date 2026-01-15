@@ -83,10 +83,7 @@ npm start
 
 ## 🔐 Admin Access
 
-| Field | Value |
-|-------|-------|
-| Username | `admin` |
-| Code | `2468` |
+Configure admin credentials in the application to manage products via Admin Panel.
 
 Navigate to **Admin Panel** in navbar to manage products.
 
@@ -272,7 +269,7 @@ npm run dev  # With auto-reload (nodemon)
 - ✅ Clear cache: DevTools → Storage → Clear All
 
 ### Admin Panel Login Fails
-- ✅ Use exact credentials: `admin` / `2468`
+- ✅ Check admin credentials are configured correctly
 - ✅ Check console for error messages
 
 ## 📝 Environment Variables

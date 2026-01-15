@@ -93,10 +93,7 @@ MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database_name
 - ✅ Error Handling
 
 ### 🔐 Admin Credentials
-```
-Username: admin
-Code: 2468
-```
+Configure in the application code as needed.
 
 ### 🌐 Supported Languages
 - English (en)
