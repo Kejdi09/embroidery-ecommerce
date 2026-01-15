@@ -305,7 +305,7 @@ MIT License - Educational & Commercial Use
 ## 👨‍💻 Author
 
 **Kejdi** - Full Stack Developer  
-[GitHub](https://github.com/yourusername) | [LinkedIn](https://linkedin.com/in/yourprofile)
+[GitHub](https://github.com/Kejdi09) | [LinkedIn](https://www.linkedin.com/in/kejdi-mu%C3%A7i)
 
 ---
 
