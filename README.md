@@ -1,6 +1,80 @@
 # 🧵 Embroidery Studio - E-Commerce Platform
 
-A full-stack MERN (MongoDB, Express, React, Node.js) e-commerce application for embroidered clothing with **multilingual support** (English, French, Albanian), **shopping cart functionality**, and **comprehensive admin panel** for product management.
+A full-stack MERN e-commerce application for embroidered clothing with multilingual support (English, French, Albanian), shopping cart, and admin panel.
+
+## ✨ Features
+
+- 🌐 **Multilingual Support** - Full UI in English, French, and Albanian
+- 🛒 **Shopping Cart** - Add/remove items with persistent state
+- ⚙️ **Admin Panel** - Product management with CRUD operations
+- 📱 **Responsive Design** - Mobile, tablet, and desktop optimized
+- 🔍 **Product Catalog** - Browse products with detailed descriptions
+- 📧 **Contact Form** - Customer inquiries with database storage
+
+## 🛠 Tech Stack
+
+**Frontend:** React.js, React Router, React Bootstrap, i18next, Axios  
+**Backend:** Node.js, Express.js, MongoDB, Mongoose  
+**Features:** Context API, Form Validation, Responsive Design
+
+## 🚀 Quick Start
+
+### Backend
+```bash
+cd backend
+npm install
+# Create .env file with PORT and MONGODB_URI
+npm start
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+
+**Runs on:** Frontend - http://localhost:3000 | Backend - http://localhost:5000
+
+## 📚 API Endpoints
+
+**Products:** `GET/POST/PUT/DELETE /api/products`  
+**Contacts:** `GET/POST/DELETE /api/contacts`
+
+## 📁 Project Structure
+
+```
+├── backend/          # Express API & MongoDB
+│   ├── models/       # Mongoose schemas
+│   ├── routes/       # API routes
+│   └── server.js     # Entry point
+│
+└── frontend/         # React application
+    ├── components/   # Reusable components
+    ├── pages/        # Page components
+    ├── context/      # State management
+    └── services/     # API calls
+```
+
+## 🌐 Internationalization
+
+Supports 3 languages with product descriptions stored in database:
+- 🇬🇧 English
+- 🇫🇷 Français  
+- 🇦🇱 Shqip
+
+## 📸 Screenshots
+
+*Admin Panel, Product Catalog, Shopping Cart, Contact Form*
+
+## 👨‍💻 Author
+
+**Kejdi** - Full Stack Developer  
+[GitHub](https://github.com/Kejdi09) | [LinkedIn](https://www.linkedin.com/in/kejdi-mu%C3%A7i)
+
+---
+
+**Version:** 1.0.0 | **License:** MIT
 
 ## 🌟 Key Features
 
@@ -309,3 +383,4 @@ MIT License - Educational & Commercial Use
 **Last Updated:** January 2026  
 **Version:** 1.0.0  
 **Status:** ✅ Production Ready
+
