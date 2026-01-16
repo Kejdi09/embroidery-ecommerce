@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Alert, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Table, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import ToastNotification from '../components/ToastNotification';
 import './ContactMessages.css';
 
 function ContactMessages() {
@@ -10,6 +11,9 @@ function ContactMessages() {
   const [contacts, setContacts] = useState([]);
   const [error, setError] = useState('');
   const [expandedId, setExpandedId] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('success');
 
   useEffect(() => {
     if (authorized) {
@@ -24,10 +28,11 @@ function ContactMessages() {
       setLoading(true);
       const response = await api.get('/contacts?limit=100');
       setContacts(response.data?.data || []);
-      setError('');
     } catch (err) {
       console.error('Failed to load contacts', err);
-      setError('Failed to load contact messages');
+      setToastMessage('Failed to load contact messages');
+      setToastVariant('danger');
+      setShowToast(true);
     } finally {
       setLoading(false);
     }
@@ -38,8 +43,13 @@ function ContactMessages() {
       try {
         await api.delete(`/contacts/${id}`);
         setContacts(contacts.filter(c => c._id !== id));
+        setToastMessage('Message deleted successfully');
+        setToastVariant('success');
+        setShowToast(true);
       } catch (err) {
-        setError('Failed to delete message');
+        setToastMessage('Failed to delete message');
+        setToastVariant('danger');
+        setShowToast(true);
       }
     }
   };
@@ -47,10 +57,13 @@ function ContactMessages() {
   if (!authorized) {
     return (
       <Container className="py-5 text-center">
-        <Alert variant="warning">Access denied. Please login to admin first.</Alert>
-        <Button as={Link} to="/admin" variant="primary">
-          Go to Admin Dashboard
-        </Button>
+        <Card className="p-4">
+          <h3 className="mb-3">Access Denied</h3>
+          <p className="text-muted mb-4">Please login to admin first.</p>
+          <Button as={Link} to="/admin" variant="primary">
+            Go to Admin Dashboard
+          </Button>
+        </Card>
       </Container>
     );
   }
@@ -66,9 +79,12 @@ function ContactMessages() {
           </Button>
         </div>
 
-        {error && (
-          <Alert variant="danger" className="mb-4">{error}</Alert>
-        )}
+        <ToastNotification 
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          message={toastMessage}
+          variant={toastVariant}
+        />
 
         {loading ? (
           <div className="loading-container text-center">
@@ -76,7 +92,10 @@ function ContactMessages() {
             <p className="mt-3">Loading messages...</p>
           </div>
         ) : contacts.length === 0 ? (
-          <Alert variant="info">No contact messages yet</Alert>
+          <Card className="p-5 text-center">
+            <h4 className="text-muted">No contact messages yet</h4>
+            <p className="text-muted">Messages will appear here when customers contact you.</p>
+          </Card>
         ) : (
           <Card className="messages-card">
             <div className="table-responsive">

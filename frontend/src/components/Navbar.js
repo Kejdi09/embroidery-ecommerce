@@ -38,9 +38,6 @@ function Navigation() {
                 </Badge>
               )}
             </Nav.Link>
-            <Nav.Link as={Link} to="/admin" className="nav-link-custom admin-link">
-              {t('admin')}
-            </Nav.Link>
           </Nav>
           <div className="ms-3">
             <LanguageSwitcher />

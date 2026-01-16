@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Alert, Form, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Form, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import ToastNotification from '../components/ToastNotification';
 import './AdminDashboard.css';
 
 function AdminDashboard() {
@@ -80,11 +81,12 @@ function AdminDashboard() {
                 <Card.Body>
                   <h2 className="admin-title mb-3">Admin Access</h2>
                   <p className="text-muted mb-4">Sign in to access the admin dashboard.</p>
-                  {showAlert && (
-                    <Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)}>
-                      {alertMessage}
-                    </Alert>
-                  )}
+                  <ToastNotification 
+                    show={showAlert}
+                    onClose={() => setShowAlert(false)}
+                    message={alertMessage}
+                    variant={alertVariant}
+                  />
                   <Form onSubmit={handleAuthSubmit}>
                     <Form.Group className="mb-3">
                       <Form.Label>Username</Form.Label>
@@ -133,11 +135,12 @@ function AdminDashboard() {
           </Button>
         </div>
 
-        {showAlert && (
-          <Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)} className="mb-4">
-            {alertMessage}
-          </Alert>
-        )}
+        <ToastNotification 
+          show={showAlert}
+          onClose={() => setShowAlert(false)}
+          message={alertMessage}
+          variant={alertVariant}
+        />
 
         {/* Statistics */}
         <Row className="g-3 mb-5">
@@ -243,7 +246,10 @@ function AdminDashboard() {
           </Col>
 
           {/* Statistics */}
-          <Col md={6} lg={4}>
+          <Col md={6} lg={4}> position-relative">
+                {stats.stockAlerts > 0 && (
+                  <span className="alert-badge">{stats.stockAlerts}</span>
+                )}
             <Card className="nav-card statistics-card h-100">
               <Card.Body className="d-flex flex-column">
                 <div className="card-icon">
@@ -283,6 +289,29 @@ function AdminDashboard() {
                   className="mt-auto"
                 >
                   View Messages
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* Team Management */}
+          <Col md={6} lg={4}>
+            <Card className="nav-card team-card h-100">
+              <Card.Body className="d-flex flex-column">
+                <div className="card-icon">
+                  <i className="fas fa-users"></i>
+                </div>
+                <h4 className="card-title">Team Management</h4>
+                <p className="card-description">
+                  Add, edit, or remove team members displayed on your About page.
+                </p>
+                <Button
+                  as={Link}
+                  to="/admin/team"
+                  variant="primary"
+                  className="mt-auto"
+                >
+                  Manage Team
                 </Button>
               </Card.Body>
             </Card>

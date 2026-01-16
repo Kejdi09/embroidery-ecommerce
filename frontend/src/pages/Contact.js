@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Alert, Card } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import api from '../services/api';
+import ToastNotification from '../components/ToastNotification';
 import './Contact.css';
 
 function Contact() {
@@ -152,19 +153,19 @@ function Contact() {
                 <Card.Body>
                   <h3 className="form-title">{t('sendUsMessage')}</h3>
                   
-                  {showSuccess && (
-                    <Alert variant="success" dismissible onClose={() => setShowSuccess(false)}>
-                      <Alert.Heading>{t('success')}</Alert.Heading>
-                      <p>{t('successMessage')}</p>
-                    </Alert>
-                  )}
+                  <ToastNotification 
+                    show={showSuccess}
+                    onClose={() => setShowSuccess(false)}
+                    message={t('successMessage')}
+                    variant="success"
+                  />
 
-                  {showError && (
-                    <Alert variant="danger" dismissible onClose={() => setShowError(false)}>
-                      <Alert.Heading>{t('error')}</Alert.Heading>
-                      <p>{errorMessage}</p>
-                    </Alert>
-                  )}
+                  <ToastNotification 
+                    show={showError}
+                    onClose={() => setShowError(false)}
+                    message={errorMessage}
+                    variant="danger"
+                  />
 
                   <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="formName">

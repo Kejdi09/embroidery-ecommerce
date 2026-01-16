@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Form, Button, Alert, Spinner, Table, Card } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Spinner, Table, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import ToastNotification from '../components/ToastNotification';
 import './SiteImages.css';
 
 const IMAGE_LOCATIONS = [
@@ -134,11 +135,12 @@ function SiteImages() {
 								<Card.Body>
 									<h2 className="admin-title mb-3">Admin Access</h2>
 									<p className="text-muted mb-4">Sign in to manage site imagery.</p>
-									{showAlert && (
-										<Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)}>
-											{alertMessage}
-										</Alert>
-									)}
+									<ToastNotification 
+										show={showAlert}
+										onClose={() => setShowAlert(false)}
+										message={alertMessage}
+										variant={alertVariant}
+									/>
 									<Form onSubmit={handleAuthSubmit}>
 										<Form.Group className="mb-3">
 											<Form.Label>Username</Form.Label>
@@ -186,11 +188,12 @@ function SiteImages() {
 					</div>
 				</div>
 
-				{showAlert && (
-					<Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)}>
-						{alertMessage}
-					</Alert>
-				)}
+				<ToastNotification 
+					show={showAlert}
+					onClose={() => setShowAlert(false)}
+					message={alertMessage}
+					variant={alertVariant}
+				/>
 
 				{loading ? (
 					<div className="loading-container">

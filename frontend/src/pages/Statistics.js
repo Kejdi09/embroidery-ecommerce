@@ -44,7 +44,7 @@ function Statistics() {
       ]);
 
       const products = productsRes.data?.data || [];
-      const contacts = contactsRes.data?.data || [];
+      const contacts = (contactsRes.data?.data || contactsRes.data) || [];
       const images = imagesRes.data || [];
 
       // Low stock products (less than 5 units)

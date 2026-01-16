@@ -5,13 +5,9 @@ import api from '../services/api';
 import './About.css';
 
 function About() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [heroImage, setHeroImage] = useState('https://images.unsplash.com/photo-1558769132-cb1aea1c8e5d?w=600');
-  const [teamImages, setTeamImages] = useState({
-    'about-team-1': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-    'about-team-2': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-    'about-team-3': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400'
-  });
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const getImageSrc = (imgData) => {
     if (imgData?.imageData && imgData?.contentType) {
@@ -33,26 +29,13 @@ function About() {
         // Leave default image
       }
 
-      // Fetch team member images
-      const teamLocations = ['about-team-1', 'about-team-2', 'about-team-3'];
-      const defaultTeamImages = {
-        'about-team-1': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-        'about-team-2': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-        'about-team-3': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400'
-      };
-
-      const results = await Promise.all(
-        teamLocations.map(async (location) => {
-          try {
-            const res = await api.get(`/images/location/${location}`);
-            const img = res.data?.data;
-            return [location, getImageSrc(img) || defaultTeamImages[location]];
-          } catch (err) {
-            return [location, defaultTeamImages[location]];
-          }
-        })
-      );
-      setTeamImages(Object.fromEntries(results));
+      // Fetch team members
+      try {
+        const res = await api.get('/team');
+        setTeamMembers(res.data?.data || []);
+      } catch (err) {
+        console.error('Failed to load team members');
+      }
     };
     fetchImages();
   }, []);
@@ -169,62 +152,37 @@ function About() {
       <section className="team-section">
         <Container>
           <h2 className="section-title text-center mb-5">{t('meetOurTeam')}</h2>
-          <Row className="g-4">
-            <Col md={6} lg={4}>
-              <Card className="team-card">
-                <div className="team-image-wrapper">
-                  <img 
-                    src={teamImages['about-team-1']} 
-                    alt="Team Member" 
-                    className="team-image"
-                  />
-                </div>
-                <Card.Body className="text-center">
-                  <h5 className="team-name">{t('sarahJohnson')}</h5>
-                  <p className="team-role">{t('founderCEO')}</p>
-                  <p className="team-bio">
-                    {t('sarahBio')}
-                  </p>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={4}>
-              <Card className="team-card">
-                <div className="team-image-wrapper">
-                  <img 
-                    src={teamImages['about-team-2']} 
-                    alt="Team Member" 
-                    className="team-image"
-                  />
-                </div>
-                <Card.Body className="text-center">
-                  <h5 className="team-name">Michael Chen</h5>
-                  <p className="team-role">Head Designer</p>
-                  <p className="team-bio">
-                    Award-winning designer specializing in contemporary embroidery patterns.
-                  </p>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6} lg={4}>
-              <Card className="team-card">
-                <div className="team-image-wrapper">
-                  <img 
-                    src={teamImages['about-team-3']} 
-                    alt="Team Member" 
-                    className="team-image"
-                  />
-                </div>
-                <Card.Body className="text-center">
-                  <h5 className="team-name">Emily Rodriguez</h5>
-                  <p className="team-role">Production Manager</p>
-                  <p className="team-bio">
-                    Ensures every piece meets our exacting quality standards.
-                  </p>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+          {teamMembers.length > 0 ? (
+            <Row className="g-4">
+              {teamMembers.map((member) => (
+                <Col md={6} lg={4} key={member._id}>
+                  <Card className="team-card">
+                    <div className="team-image-wrapper">
+                      <img 
+                        src={member.imageData && member.contentType 
+                          ? `data:${member.contentType};base64,${member.imageData}`
+                          : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400'
+                        }
+                        alt={member.name} 
+                        className="team-image"
+                      />
+                    </div>
+                    <Card.Body className="text-center">
+                      <h5 className="team-name">{member.name}</h5>
+                      <p className="team-role">{member.role[i18n.language] || member.role.en}</p>
+                      <p className="team-bio">
+                        {member.bio[i18n.language] || member.bio.en}
+                      </p>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <div className="text-center">
+              <p className="text-muted">No team members to display yet.</p>
+            </div>
+          )}
         </Container>
       </section>
 

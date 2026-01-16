@@ -11,6 +11,7 @@ import ProductManagement from './pages/ProductManagement';
 import SiteImages from './pages/SiteImages';
 import Statistics from './pages/Statistics';
 import ContactMessages from './pages/ContactMessages';
+import TeamManagement from './pages/TeamManagement';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import './i18n';
@@ -32,6 +33,7 @@ function App() {
               <Route path="/admin/images" element={<SiteImages />} />
               <Route path="/admin/statistics" element={<Statistics />} />
               <Route path="/admin/contacts" element={<ContactMessages />} />
+              <Route path="/admin/team" element={<TeamManagement />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
             </Routes>

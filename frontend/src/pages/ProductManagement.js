@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Table, Modal, Form, Alert, Spinner, Card } from 'react-bootstrap';
+import { Container, Row, Col, Button, Table, Modal, Form, Spinner, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import ToastNotification from '../components/ToastNotification';
 import './ProductManagement.css';
 
 function ProductManagement() {
@@ -253,11 +254,12 @@ function ProductManagement() {
                 <Card.Body>
                   <h2 className="admin-title mb-3">{t('adminAccessTitle')}</h2>
                   <p className="text-muted mb-4">{t('adminAccessSubtitle')}</p>
-                  {showAlert && (
-                    <Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)}>
-                      {alertMessage}
-                    </Alert>
-                  )}
+                  <ToastNotification 
+                    show={showAlert}
+                    onClose={() => setShowAlert(false)}
+                    message={alertMessage}
+                    variant={alertVariant}
+                  />
                   <Form onSubmit={handleAuthSubmit}>
                     <Form.Group className="mb-3">
                       <Form.Label>{t('username')}</Form.Label>
@@ -317,11 +319,12 @@ function ProductManagement() {
           </Col>
         </Row>
 
-        {showAlert && (
-          <Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)}>
-            {alertMessage}
-          </Alert>
-        )}
+        <ToastNotification 
+          show={showAlert}
+          onClose={() => setShowAlert(false)}
+          message={alertMessage}
+          variant={alertVariant}
+        />
 
         {loading ? (
           <div className="loading-container">
