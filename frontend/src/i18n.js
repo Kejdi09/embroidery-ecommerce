@@ -14,7 +14,7 @@ const resources = {
       shop: 'Shop',
       
       // Navbar
-      brandLogo: 'Embroidery Studio',
+      brandLogo: 'Gjilpera Magjike',
       
       // Hero
       heroTitle: 'Premium Machine Embroidery',
@@ -78,10 +78,10 @@ const resources = {
       
       // About
       aboutUs: 'About Us',
-      aboutEmbroideryStudio: 'About Embroidery Studio',
+      aboutEmbroideryStudio: 'About Gjilpera Magjike',
       craftingExcellence: 'Crafting Excellence in Every Stitch Since 2015',
       ourStory: 'Our Story',
-      ourStoryText: 'Embroidery Studio was born from a passion for blending traditional craftsmanship with modern technology. What started as a small workshop with a single embroidery machine has grown into a leading provider of premium machine-embroidered clothing.',
+      ourStoryText: 'Gjilpera Magjike was born from a passion for blending traditional craftsmanship with modern technology. What started as a small workshop with a single embroidery machine has grown into a leading provider of premium machine-embroidered clothing.',
       ourJourney: 'Our journey began when our founder, inspired by generations of textile artisans, recognized the potential of combining time-honored embroidery techniques with state-of-the-art machinery. This vision has allowed us to create pieces that maintain the soul of handcrafted art while achieving the precision and consistency that modern technology offers.',
       ourCustomers: 'Today, we serve thousands of customers who appreciate quality, detail, and the unique character that machine embroidery brings to every garment. Each piece that leaves our studio is a testament to our commitment to excellence.',
       ourCoreValues: 'Our Core Values',
@@ -157,7 +157,7 @@ const resources = {
       signOut: 'Sign out',
 
       // Footer
-      footerTitle: 'Embroidery Studio',
+      footerTitle: 'Gjilpera Magjike',
       footerDescription: 'Premium machine-embroidered clothing for every occasion. Quality craftsmanship meets modern design.',
       footerCopyright: 'All Rights Reserved',
       
@@ -176,7 +176,7 @@ const resources = {
       shop: 'Boutique',
       
       // Navbar
-      brandLogo: 'Studio de Broderie',
+      brandLogo: 'Gjilpera Magjike',
       
       // Hero
       heroTitle: 'Broderie Prémiée par Machine',
@@ -240,10 +240,10 @@ const resources = {
       
       // About
       aboutUs: 'À Propos de Nous',
-      aboutEmbroideryStudio: 'À Propos du Studio de Broderie',
+      aboutEmbroideryStudio: 'À Propos de Gjilpera Magjike',
       craftingExcellence: 'Fabriquer l\'Excellence dans Chaque Point Depuis 2015',
       ourStory: 'Notre Histoire',
-      ourStoryText: 'Studio de Broderie est né d\'une passion pour fusionner l\'artisanat traditionnel avec la technologie moderne. Ce qui a commencé comme un petit atelier avec une seule machine à broder est devenu un fournisseur leader de vêtements de broderie à la machine premium.',
+      ourStoryText: 'Gjilpera Magjike est né d\'une passion pour fusionner l\'artisanat traditionnel avec la technologie moderne. Ce qui a commencé comme un petit atelier avec une seule machine à broder est devenu un fournisseur leader de vêtements de broderie à la machine premium.',
       ourJourney: 'Notre voyage a commencé lorsque notre fondateur, inspiré par des générations d\'artisans textiles, a reconnu le potentiel de combiner les techniques de broderie traditionnelles avec la machinerie de pointe. Cette vision nous a permis de créer des pièces qui conservent l\'âme de l\'art fait à la main tout en réalisant la précision et la cohérence que la technologie moderne offre.',
       ourCustomers: 'Aujourd\'hui, nous servons des milliers de clients qui apprécient la qualité, les détails et le caractère unique que la broderie à la machine apporte à chaque vêtement. Chaque pièce qui quitte notre studio est un témoignage de notre engagement envers l\'excellence.',
       ourCoreValues: 'Nos Valeurs Fondamentales',
@@ -319,7 +319,7 @@ const resources = {
       signOut: 'Déconnexion',
 
       // Footer
-      footerTitle: 'Studio de Broderie',
+      footerTitle: 'Gjilpera Magjike',
       footerDescription: 'Vêtements de broderie à la machine premium pour chaque occasion. L\'artisanat de qualité rencontre la conception moderne.',
       footerCopyright: 'Tous Droits Réservés',
       
@@ -399,10 +399,10 @@ const resources = {
       
       // About
       aboutUs: 'Rreth Nesh',
-      aboutEmbroideryStudio: 'Rreth Studio të Qëndisjes',
+      aboutEmbroideryStudio: 'Rreth Gjilpera Magjike',
       craftingExcellence: 'Punoni Përsosmërinë në Çdo Pike Që nga 2015',
       ourStory: 'Historia jonë',
-      ourStoryText: 'Studio i Qëndisjes lindi nga pasioni për të kombinuar mjeshtërinë tradicionale me teknologjinë moderne. Ajo që filloi si një punishte e vogël me një makinë qëndisje është bërë një furnizues zyrtar i veshjeve të qëndisjeve të makinës premium.',
+      ourStoryText: 'Gjilpera Magjike lindi nga pasioni për të kombinuar mjeshtërinë tradicionale me teknologjinë moderne. Ajo që filloi si një punishte e vogël me një makinë qëndisje është bërë një furnizues zyrtar i veshjeve të qëndisjeve të makinës premium.',
       ourJourney: 'Udhëtimi ynë filloi kur themeluesja ynë, e frymëzuar nga brezat e artizanëve tekstilë, e njoh potencialin e kombinimit të teknikave tradicionale të qëndisjes me makineri të fundit të artit. Kjo vizion na ka lejuar të krijojmë copëza që mbajnë shpirtin e artit të bërë me dorë ndërsa arrijmë saktësinë dhe përputhshmërinë që ofron teknologjia moderne.',
       ourCustomers: 'Sot, ne shërbenim mijëra klientëve që vlerësojnë cilësinë, detajet dhe karakterin unik që qëndisja me makinë i jep çdo veshjeje. Çdo copëz që del nga studio ynë është dëshmi e përkushtimit tonë ndaj përsosmërisë.',
       ourCoreValues: 'Vlerat tona Themelore',
@@ -478,7 +478,7 @@ const resources = {
       signOut: 'Dil',
 
       // Footer
-      footerTitle: 'Studio i Qëndisjes',
+      footerTitle: 'Gjilpera Magjike',
       footerDescription: 'Veshje me qëndisje makinerike premium për çdo rast. Mjeshtësia e cilësisë përket dizajnit modern.',
       footerCopyright: 'Të Gjitha të Drejtat e Rezervuara',
       
