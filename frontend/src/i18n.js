@@ -20,7 +20,7 @@ const resources = {
       heroTitle: 'Premium Machine Embroidery',
       heroSubtitle: 'Discover our exclusive collection of machine-embroidered clothing. Each piece is crafted with precision and care.',
       exploreCollection: 'Explore Collection',
-      
+      //
       // Products
       ourCollection: 'Our Collection',
       browseProducts: 'Browse our finest machine-embroidered products',
