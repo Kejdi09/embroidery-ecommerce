@@ -9,6 +9,14 @@
   margin-bottom: 2rem;
 }
 
+.footer-logo {
+  max-width: 100%;
+  height: auto;
+  max-height: 80px;
+  margin-bottom: 1rem;
+  display: block;
+}
+
 .footer-title {
   color: #ffffff;
   font-weight: 700;

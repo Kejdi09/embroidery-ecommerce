@@ -32,16 +32,13 @@ const productSchema = new mongoose.Schema({
     required: true
   },
   imageUrl: {
-    type: String,
-    required: false
+    type: String
   },
   imageData: {
-    type: String,
-    required: false // base64 encoded image
+    type: Buffer
   },
   contentType: {
-    type: String,
-    required: false // e.g., 'image/jpeg', 'image/png'
+    type: String
   },
   inStock: {
     type: Boolean,

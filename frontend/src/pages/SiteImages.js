@@ -1,169 +1,295 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Form, Button, Table, Alert, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert, Spinner, Table, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
+import './SiteImages.css';
 
-const LOCATIONS = [
-  { value: 'hero', label: 'Hero Banner' },
-  { value: 'about-hero', label: 'About Hero' },
-  { value: 'logo', label: 'Logo' },
-  { value: 'footer', label: 'Footer' },
-  { value: 'team-1', label: 'Team Member 1' },
-  { value: 'team-2', label: 'Team Member 2' },
-  { value: 'team-3', label: 'Team Member 3' }
+const IMAGE_LOCATIONS = [
+  // Hero banners
+  { key: 'home-hero', label: 'Home Hero Banner' },
+  { key: 'about-hero', label: 'About Hero Banner' },
+  { key: 'contact-hero', label: 'Contact Hero Banner' },
+  { key: 'products-hero', label: 'Products Hero Banner' },
+  // Team members
+  { key: 'about-team-1', label: 'Team Member 1 (Sarah Johnson)' },
+  { key: 'about-team-2', label: 'Team Member 2 (Michael Chen)' },
+  { key: 'about-team-3', label: 'Team Member 3 (Emily Rodriguez)' },
+  // Footer & branding
+  { key: 'footer-logo', label: 'Footer Logo/Brand Image' }
 ];
 
 function SiteImages() {
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [alert, setAlert] = useState({ show: false, variant: 'success', message: '' });
-  const [form, setForm] = useState({ name: '', location: 'hero' });
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
+	const [authorized, setAuthorized] = useState(() => localStorage.getItem('adminAuthorized') === 'true');
+	const [credentials, setCredentials] = useState({ username: '', code: '' });
+	const [showAlert, setShowAlert] = useState(false);
+	const [alertMessage, setAlertMessage] = useState('');
+	const [alertVariant, setAlertVariant] = useState('success');
+	const [loading, setLoading] = useState(true);
+	const [images, setImages] = useState({});
+	const [uploading, setUploading] = useState(false);
+	const [selectedLocation, setSelectedLocation] = useState(IMAGE_LOCATIONS[0].key);
+	const [displayName, setDisplayName] = useState('');
+	const [file, setFile] = useState(null);
+	const [preview, setPreview] = useState('');
 
-  useEffect(() => {
-    fetchImages();
-  }, []);
+	const ACCESS_USERNAME = 'admin';
+	const ACCESS_CODE = '2468';
 
-  const fetchImages = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get('/images/all');
-      setImages(res.data || []);
-    } catch (err) {
-      console.error(err);
-      setAlert({ show: true, variant: 'danger', message: 'Failed to load images' });
-    } finally {
-      setLoading(false);
-    }
-  };
+	useEffect(() => {
+		if (authorized) {
+			fetchImages();
+		} else {
+			setLoading(false);
+		}
+	}, [authorized]);
 
-  const handleFileChange = (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    if (f.size > 5 * 1024 * 1024) {
-      setAlert({ show: true, variant: 'danger', message: 'Image must be under 5MB' });
-      return;
-    }
-    setFile(f);
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result);
-    reader.readAsDataURL(f);
-  };
+	const showAlertMessage = (message, variant = 'success') => {
+		setAlertMessage(message);
+		setAlertVariant(variant);
+		setShowAlert(true);
+		setTimeout(() => setShowAlert(false), 2500);
+	};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!file) {
-      setAlert({ show: true, variant: 'danger', message: 'Please select an image file' });
-      return;
-    }
-    try {
-      const data = new FormData();
-      data.append('name', form.name || form.location);
-      data.append('location', form.location);
-      data.append('image', file);
-      await api.post('/images/upload', data, { headers: { 'Content-Type': 'multipart/form-data' } });
-      setAlert({ show: true, variant: 'success', message: 'Image saved' });
-      setFile(null);
-      setPreview(null);
-      setForm({ ...form, name: '' });
-      fetchImages();
-    } catch (err) {
-      console.error(err);
-      setAlert({ show: true, variant: 'danger', message: 'Upload failed' });
-    }
-  };
+	const fetchImages = async () => {
+		try {
+			setLoading(true);
+			const results = await Promise.all(
+				IMAGE_LOCATIONS.map(async ({ key }) => {
+					try {
+						const res = await api.get(`/images/location/${key}`);
+						return [key, res.data?.data];
+					} catch (err) {
+						return [key, null];
+					}
+				})
+			);
+			setImages(Object.fromEntries(results));
+		} catch (err) {
+			showAlertMessage('Failed to load site images', 'danger');
+		} finally {
+			setLoading(false);
+		}
+	};
 
-  return (
-    <Container className="py-4">
-      <h2 className="mb-3">Site Images</h2>
-      <p className="text-muted">Upload fixed images (hero, about, logo, etc.)</p>
+	const handleAuthSubmit = (e) => {
+		e.preventDefault();
+		if (credentials.username.trim() === ACCESS_USERNAME && credentials.code.trim() === ACCESS_CODE) {
+			localStorage.setItem('adminAuthorized', 'true');
+			setAuthorized(true);
+			setLoading(true);
+			showAlertMessage('Access granted', 'success');
+		} else {
+			showAlertMessage('Invalid credentials', 'danger');
+		}
+	};
 
-      {alert.show && (
-        <Alert variant={alert.variant} onClose={() => setAlert({ ...alert, show: false })} dismissible>
-          {alert.message}
-        </Alert>
-      )}
+	const handleFileChange = (file) => {
+		setFile(file || null);
+		setPreview(file ? URL.createObjectURL(file) : '');
+	};
 
-      <Form onSubmit={handleSubmit} className="mb-4">
-        <Row className="g-3">
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Location</Form.Label>
-              <Form.Select
-                value={form.location}
-                onChange={(e) => setForm({ ...form, location: e.target.value })}
-              >
-                {LOCATIONS.map((loc) => (
-                  <option key={loc.value} value={loc.value}>{loc.label}</option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Name (optional)</Form.Label>
-              <Form.Control
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Display name"
-              />
-            </Form.Group>
-          </Col>
-          <Col md={4}>
-            <Form.Group>
-              <Form.Label>Image File</Form.Label>
-              <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
-            </Form.Group>
-            {preview && (
-              <div className="mt-2">
-                <img src={preview} alt="Preview" style={{ maxWidth: '150px', maxHeight: '150px', objectFit: 'cover' }} />
-              </div>
-            )}
-          </Col>
-        </Row>
-        <div className="mt-3">
-          <Button type="submit" variant="primary">Save Image</Button>
-        </div>
-      </Form>
+	const getImageSrc = (img) => {
+		if (img?.imageData && img?.contentType) {
+			return `data:${img.contentType};base64,${img.imageData}`;
+		}
+		return '';
+	};
 
-      <h5>Current Images</h5>
-      {loading ? (
-        <Spinner animation="border" />
-      ) : (
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Name</th>
-              <th>Preview</th>
-              <th>Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {images.length === 0 ? (
-              <tr><td colSpan="4" className="text-center">No images</td></tr>
-            ) : (
-              images.map((img) => (
-                <tr key={img._id}>
-                  <td>{img.location}</td>
-                  <td>{img.name}</td>
-                  <td>
-                    <img
-                      src={img.imageData ? `data:${img.contentType};base64,${img.imageData}` : '/placeholder.jpg'}
-                      alt={img.name}
-                      style={{ maxWidth: '120px', maxHeight: '120px', objectFit: 'cover' }}
-                    />
-                  </td>
-                  <td>{new Date(img.updatedAt || img.createdAt).toLocaleString()}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
-      )}
-    </Container>
-  );
+	const handleUpload = async () => {
+		if (!file) {
+			showAlertMessage('Please choose a file first', 'warning');
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append('location', selectedLocation);
+		formData.append('name', displayName || selectedLocation);
+		formData.append('image', file);
+
+		try {
+			setUploading(true);
+			await api.post('/images/upload', formData, {
+				headers: { 'Content-Type': 'multipart/form-data' }
+			});
+			showAlertMessage('Image updated');
+			setFile(null);
+			setPreview('');
+			setDisplayName('');
+			fetchImages();
+		} catch (err) {
+			console.error(err);
+			showAlertMessage('Upload failed', 'danger');
+		} finally {
+			setUploading(false);
+		}
+	};
+
+	if (!authorized) {
+		return (
+			<div className="site-images-page">
+				<Container className="py-5">
+					<Row className="justify-content-center">
+						<Col md={6} lg={5}>
+							<Card className="auth-card">
+								<Card.Body>
+									<h2 className="admin-title mb-3">Admin Access</h2>
+									<p className="text-muted mb-4">Sign in to manage site imagery.</p>
+									{showAlert && (
+										<Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)}>
+											{alertMessage}
+										</Alert>
+									)}
+									<Form onSubmit={handleAuthSubmit}>
+										<Form.Group className="mb-3">
+											<Form.Label>Username</Form.Label>
+											<Form.Control
+												type="text"
+												value={credentials.username}
+												onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
+												placeholder="Enter username"
+												required
+											/>
+										</Form.Group>
+										<Form.Group className="mb-4">
+											<Form.Label>Access Code</Form.Label>
+											<Form.Control
+												type="password"
+												value={credentials.code}
+												onChange={(e) => setCredentials(prev => ({ ...prev, code: e.target.value }))}
+												placeholder="Enter access code"
+												required
+											/>
+										</Form.Group>
+										<Button type="submit" variant="primary" className="w-100">
+											Unlock
+										</Button>
+									</Form>
+								</Card.Body>
+							</Card>
+						</Col>
+					</Row>
+				</Container>
+			</div>
+		);
+	}
+
+	return (
+		<div className="site-images-page">
+			<Container className="py-5">
+				<div className="page-header">
+					<h1 className="admin-title">Site Images</h1>
+					<div className="d-flex gap-2 align-items-center flex-wrap">
+						<Button as={Link} to="/admin" variant="secondary">Back to Products</Button>
+						<Button variant="outline-dark" onClick={fetchImages} disabled={loading}>
+							Refresh
+						</Button>
+					</div>
+				</div>
+
+				{showAlert && (
+					<Alert variant={alertVariant} dismissible onClose={() => setShowAlert(false)}>
+						{alertMessage}
+					</Alert>
+				)}
+
+				{loading ? (
+					<div className="loading-container">
+						<Spinner animation="border" />
+						<p className="mt-3">Loading images...</p>
+					</div>
+				) : (
+					<>
+						<Card className="mb-4 upload-card">
+							<Card.Body>
+								<Row className="g-3 align-items-end">
+									<Col md={4}>
+										<Form.Group>
+											<Form.Label>Location</Form.Label>
+											<Form.Select
+												value={selectedLocation}
+												onChange={(e) => setSelectedLocation(e.target.value)}
+											>
+												{IMAGE_LOCATIONS.map(({ key, label }) => (
+													<option key={key} value={key}>{label}</option>
+												))}
+											</Form.Select>
+										</Form.Group>
+									</Col>
+									<Col md={3}>
+										<Form.Group>
+											<Form.Label>Display Name (optional)</Form.Label>
+											<Form.Control
+												type="text"
+												value={displayName}
+												onChange={(e) => setDisplayName(e.target.value)}
+												placeholder="e.g., Home Banner"
+											/>
+										</Form.Group>
+									</Col>
+									<Col md={3}>
+										<Form.Group>
+											<Form.Label>Image File</Form.Label>
+											<Form.Control
+												type="file"
+												accept="image/*"
+												onChange={(e) => handleFileChange(e.target.files?.[0])}
+											/>
+										</Form.Group>
+									</Col>
+									<Col md={2} className="d-flex align-items-end">
+										<Button
+											variant="warning"
+											className="w-100"
+											onClick={handleUpload}
+											disabled={uploading}
+										>
+											{uploading ? 'Uploading...' : 'Upload'}
+										</Button>
+									</Col>
+								</Row>
+								{preview && (
+									<div className="mt-3 d-flex align-items-center gap-3">
+										<img src={preview} alt="Preview" className="site-image-preview small-preview" />
+										<span className="text-muted small">Preview</span>
+									</div>
+								)}
+							</Card.Body>
+						</Card>
+
+						<Table bordered hover responsive className="site-images-table">
+							<thead>
+								<tr>
+									<th>Location</th>
+									<th>Name</th>
+									<th>Last Updated</th>
+									<th>Preview</th>
+								</tr>
+							</thead>
+							<tbody>
+								{IMAGE_LOCATIONS.map(({ key, label }) => {
+									const imgData = images[key];
+									return (
+										<tr key={key}>
+											<td>{label}</td>
+											<td>{imgData?.name || '—'}</td>
+											<td>{imgData ? new Date(imgData.updatedAt).toLocaleString() : 'No image uploaded'}</td>
+											<td>
+												{imgData ? (
+													<img src={getImageSrc(imgData)} alt={label} className="table-thumb" />
+												) : (
+													<span className="text-muted">None</span>
+												)}
+											</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</Table>
+					</>
+				)}
+			</Container>
+		</div>
+	);
 }
 
 export default SiteImages;

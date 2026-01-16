@@ -1,0 +1,210 @@
+.admin-dashboard-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+  padding: 2rem 0;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.admin-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0d0d0d;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.sign-out-btn {
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Statistics Cards */
+.stat-card {
+  border: 1px solid #0d0d0d;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card .card-body {
+  padding: 2rem;
+}
+
+.stat-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.8rem;
+  color: white;
+}
+
+.stat-icon.products {
+  background: linear-gradient(135deg, #c1121f, #8b0000);
+}
+
+.stat-icon.contacts {
+  background: linear-gradient(135deg, #0099cc, #0066aa);
+}
+
+.stat-icon.images {
+  background: linear-gradient(135deg, #ffb800, #ff9500);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #0d0d0d;
+  margin: 0.5rem 0;
+}
+
+.stat-label {
+  color: #7a7a7a;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Navigation Cards */
+.nav-card {
+  border: 2px solid #ececec;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.nav-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  border-color: #0d0d0d;
+}
+
+.nav-card .card-body {
+  padding: 2rem;
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.products-card .card-icon {
+  background: linear-gradient(135deg, rgba(193, 18, 31, 0.15), rgba(139, 0, 0, 0.1));
+  color: #c1121f;
+}
+
+.images-card .card-icon {
+  background: linear-gradient(135deg, rgba(255, 184, 0, 0.15), rgba(255, 149, 0, 0.1));
+  color: #ffb800;
+}
+
+.statistics-card .card-icon {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(22, 163, 74, 0.1));
+  color: #22c55e;
+}
+
+.contacts-card .card-icon {
+  background: linear-gradient(135deg, rgba(0, 153, 204, 0.15), rgba(0, 102, 170, 0.1));
+  color: #0099cc;
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0d0d0d;
+  margin-bottom: 0.75rem;
+}
+
+.card-description {
+  color: #7a7a7a;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.nav-card .btn {
+  font-weight: 600;
+  padding: 0.65rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.products-card .btn-primary {
+  background-color: #c1121f;
+  border-color: #c1121f;
+}
+
+.products-card .btn-primary:hover {
+  background-color: #8b0000;
+  border-color: #8b0000;
+}
+
+/* Auth Page */
+.admin-auth-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.auth-card {
+  border: 1px solid #0d0d0d;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  padding: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .admin-title {
+    font-size: 2rem;
+  }
+
+  .sign-out-btn {
+    width: 100%;
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+}

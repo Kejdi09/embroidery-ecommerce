@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Alert, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import api from '../services/api';
@@ -6,12 +6,28 @@ import './Contact.css';
 
 function Contact() {
   const { t } = useTranslation();
+  const [headerImage, setHeaderImage] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: ''
   });
+
+  useEffect(() => {
+    const fetchHeaderImage = async () => {
+      try {
+        const res = await api.get('/images/location/contact-hero');
+        const img = res.data?.data;
+        if (img?.imageData && img?.contentType) {
+          setHeaderImage(`data:${img.contentType};base64,${img.imageData}`);
+        }
+      } catch (err) {
+        // Use background color fallback
+      }
+    };
+    fetchHeaderImage();
+  }, []);
 
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
@@ -113,7 +129,7 @@ function Contact() {
   return (
     <div className="contact-page">
       {/* Contact Header */}
-      <section className="contact-header">
+      <section className="contact-header" style={headerImage ? { backgroundImage: `url('${headerImage}')`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}>
         <Container>
           <Row>
             <Col lg={12} className="text-center">

@@ -1,114 +1,70 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
 const Image = require('../models/Image');
 
-// Configure multer for memory storage
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'), false);
-    }
-  }
-});
+const router = express.Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Upload site image (hero, about, logo, etc.)
+// Upload or replace image for a location
 router.post('/upload', upload.single('image'), async (req, res) => {
   try {
     const { name, location } = req.body;
-    
     if (!req.file) {
-      return res.status(400).json({ message: 'No image file provided' });
+      return res.status(400).json({ success: false, message: 'Image file is required' });
     }
+    const payload = {
+      name: name || location,
+      location,
+      imageData: req.file.buffer,
+      contentType: req.file.mimetype
+    };
 
-    if (!name || !location) {
-      return res.status(400).json({ message: 'Name and location are required' });
-    }
-
-    // Convert buffer to base64
-    const imageData = req.file.buffer.toString('base64');
-
-    // Check if image with this location already exists
-    let image = await Image.findOne({ location });
-    
-    if (image) {
-      // Update existing image
-      image.name = name;
-      image.imageData = imageData;
-      image.contentType = req.file.mimetype;
-      image.updatedAt = Date.now();
-      await image.save();
-    } else {
-      // Create new image
-      image = new Image({
-        name,
-        location,
-        imageData,
-        contentType: req.file.mimetype
-      });
-      await image.save();
-    }
-
-    res.status(200).json({
-      message: 'Image uploaded successfully',
-      imageId: image._id,
-      location: image.location
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error uploading image', error: error.message });
+    const saved = await Image.findOneAndUpdate({ location }, payload, { upsert: true, new: true, setDefaultsOnInsert: true });
+    res.json({ success: true, data: saved });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Upload failed' });
   }
 });
 
-// Get image by location
+// Get latest image for a location
 router.get('/location/:location', async (req, res) => {
   try {
-    const image = await Image.findOne({ location: req.params.location });
-    
-    if (!image) {
-      return res.status(404).json({ message: 'Image not found' });
+    const img = await Image.findOne({ location: req.params.location }).sort({ updatedAt: -1 });
+    if (!img) {
+      return res.status(404).json({ success: false, message: 'Not found' });
     }
-
     res.json({
-      id: image._id,
-      name: image.name,
-      location: image.location,
-      imageData: image.imageData,
-      contentType: image.contentType
+      success: true,
+      data: {
+        _id: img._id,
+        name: img.name,
+        location: img.location,
+        updatedAt: img.updatedAt,
+        imageData: img.imageData.toString('base64'),
+        contentType: img.contentType
+      }
     });
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching image', error: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Error fetching image' });
   }
 });
 
-// Get all site images
-router.get('/all', async (req, res) => {
+// List all images (metadata only)
+router.get('/all', async (_req, res) => {
   try {
-    const images = await Image.find().select('-imageData');
-    res.json(images);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching images', error: error.message });
-  }
-});
-
-// Delete image
-router.delete('/:id', async (req, res) => {
-  try {
-    const image = await Image.findByIdAndDelete(req.params.id);
-    
-    if (!image) {
-      return res.status(404).json({ message: 'Image not found' });
-    }
-
-    res.json({ message: 'Image deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting image', error: error.message });
+    const images = await Image.find({}).sort({ updatedAt: -1 });
+    res.json(images.map(img => ({
+      _id: img._id,
+      name: img.name,
+      location: img.location,
+      updatedAt: img.updatedAt,
+      createdAt: img.createdAt
+    })));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Error fetching images' });
   }
 });
 

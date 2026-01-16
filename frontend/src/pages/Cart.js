@@ -9,6 +9,13 @@ function Cart() {
   const { cart, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
   const { t } = useTranslation();
 
+  const getImageSrc = (item) => {
+    if (item?.imageData && item?.contentType) {
+      return `data:${item.contentType};base64,${item.imageData}`;
+    }
+    return item?.imageUrl || 'https://via.placeholder.com/80?text=No+Image';
+  };
+
   if (cart.length === 0) {
     return (
       <Container fluid className="cart-page py-5">
@@ -54,7 +61,7 @@ function Cart() {
                     <tr key={item._id}>
                       <td>
                         <div className="cart-product-info">
-                          <img src={item.imageUrl} alt={item.name} />
+                          <img src={getImageSrc(item)} alt={item.name} />
                           <div>
                             <Link to={`/product/${item._id}`} className="product-name-link">
                               {item.name}

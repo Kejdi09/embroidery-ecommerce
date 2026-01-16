@@ -1,19 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import api from '../services/api';
 import './Footer.css';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
   const { t } = useTranslation();
+  const [footerLogo, setFooterLogo] = useState('');
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const res = await api.get('/images/location/footer-logo');
+        const img = res.data?.data;
+        if (img?.imageData && img?.contentType) {
+          setFooterLogo(`data:${img.contentType};base64,${img.imageData}`);
+        }
+      } catch (err) {
+        // No custom logo
+      }
+    };
+    fetchLogo();
+  }, []);
 
   return (
     <footer className="custom-footer">
       <Container>
         <Row className="py-4">
           <Col md={4} className="footer-section">
-            <h5 className="footer-title">{t('footerTitle')}</h5>
+            {footerLogo ? (
+              <img src={footerLogo} alt="Logo" className="footer-logo" />
+            ) : (
+              <h5 className="footer-title">{t('footerTitle')}</h5>
+            )}
             <p className="footer-text">
               {t('footerDescription')}
             </p>

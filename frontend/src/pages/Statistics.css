@@ -1,0 +1,446 @@
+.statistics-page {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 0;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.page-header > div h1 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.admin-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  border-left: 4px solid #007bff;
+  padding-left: 12px;
+}
+
+/* Alert Cards */
+.alert-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  background: white;
+  opacity: 0.7;
+}
+
+.alert-card.active {
+  opacity: 1;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-left: 6px solid;
+}
+
+.alert-card.alert-danger {
+  border-left-color: #dc3545;
+}
+
+.alert-card.alert-danger.active {
+  background: rgba(220, 53, 69, 0.05);
+}
+
+.alert-card.alert-warning {
+  border-left-color: #ffc107;
+}
+
+.alert-card.alert-warning.active {
+  background: rgba(255, 193, 7, 0.05);
+}
+
+.alert-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #7f8c8d;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.alert-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.alert-subtitle {
+  font-size: 12px;
+  color: #95a5a6;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* Metric Cards */
+.metric-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  background: white;
+}
+
+.metric-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.metric-card.primary {
+  border-top: 4px solid #007bff;
+}
+
+.metric-card.success {
+  border-top: 4px solid #28a745;
+}
+
+.metric-card.danger {
+  border-top: 4px solid #dc3545;
+}
+
+.metric-card.info {
+  border-top: 4px solid #17a2b8;
+}
+
+.metric-card.highlight {
+  border-top: 4px solid #ffc107;
+  background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+}
+
+.metric-card Card-Body {
+  padding: 25px 20px;
+}
+
+.metric-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #7f8c8d;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.metric-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.metric-price {
+  font-size: 28px;
+  font-weight: 700;
+  color: #27ae60;
+  margin: 0;
+}
+
+.metric-subtitle {
+  font-size: 12px;
+  color: #95a5a6;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+/* Analytics Cards */
+.analytics-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.analytics-card .card-header {
+  background: white;
+  border-bottom: 2px solid #ecf0f1;
+  padding: 20px;
+}
+
+.analytics-card .card-header h5 {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.table-responsive {
+  border-radius: 0 0 12px 12px;
+}
+
+.analytics-card table {
+  font-size: 14px;
+}
+
+.analytics-card thead {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: #7f8c8d;
+}
+
+.analytics-card tbody tr {
+  border-bottom: 1px solid #ecf0f1;
+  transition: background-color 0.2s ease;
+}
+
+.analytics-card tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Alert Row Styles */
+.stock-alert-row {
+  background-color: rgba(220, 53, 69, 0.03);
+}
+
+.stock-alert-row:hover {
+  background-color: rgba(220, 53, 69, 0.08);
+}
+
+.low-stock-row {
+  background-color: rgba(255, 193, 7, 0.03);
+}
+
+.low-stock-row:hover {
+  background-color: rgba(255, 193, 7, 0.08);
+}
+
+.category-name,
+.type-name,
+.location-name {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.product-name {
+  font-weight: 600;
+  color: #2c3e50;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.price-col,
+.price-highlight {
+  font-weight: 700;
+  color: #27ae60;
+}
+
+.price-total {
+  font-weight: 700;
+  color: #2980b9;
+  font-size: 15px;
+}
+
+.rank-badge {
+  text-align: center;
+}
+
+.badge {
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Status Indicators */
+.status-alert {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.status-good {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.action-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.action-link:hover {
+  text-decoration: underline;
+}
+
+/* Mini Bar Chart */
+.mini-bar {
+  height: 6px;
+  background-color: #ecf0f1;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.mini-bar .bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3498db, #2980b9);
+  transition: width 0.3s ease;
+}
+
+small {
+  color: #95a5a6;
+  font-size: 11px;
+}
+
+/* Info Cards */
+.info-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease;
+  padding: 30px 20px;
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.info-card .icon-large {
+  font-size: 32px;
+  color: #3498db;
+  margin-bottom: 15px;
+}
+
+.info-card .number {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 15px 0 10px 0;
+}
+
+.info-card p {
+  color: #7f8c8d;
+  margin-bottom: 0;
+}
+
+/* Progress Bar */
+.progress {
+  height: 24px;
+  border-radius: 6px;
+  background-color: #ecf0f1;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #27ae60, #2ecc71);
+  font-weight: 600;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .admin-title {
+    font-size: 24px;
+  }
+
+  .metric-value,
+  .alert-value {
+    font-size: 28px;
+  }
+
+  .section-title {
+    font-size: 16px;
+  }
+
+  .analytics-card table {
+    font-size: 12px;
+  }
+
+  .product-name {
+    max-width: 150px;
+  }
+}
+
+/* Loading & Error States */
+.spinner-border {
+  color: #007bff;
+}
+
+.alert {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.alert-danger {
+  background-color: #ffe5e5;
+  color: #c0392b;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.metric-card,
+.alert-card,
+.analytics-card,
+.info-card {
+  animation: slideIn 0.5s ease forwards;
+}
+
+.metric-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.metric-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.metric-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.metric-card:nth-child(4) {
+  animation-delay: 0.4s;
+}

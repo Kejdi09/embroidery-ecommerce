@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Table, Modal, Form, Alert, Spinner, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 import './ProductManagement.css';
 
@@ -17,7 +18,7 @@ function ProductManagement() {
   const [authorized, setAuthorized] = useState(() => localStorage.getItem('adminAuthorized') === 'true');
   const [credentials, setCredentials] = useState({ username: '', code: '' });
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
 
   const ACCESS_USERNAME = 'admin';
   const ACCESS_CODE = '2468';
@@ -31,10 +32,30 @@ function ProductManagement() {
     },
     price: '',
     category: '',
-    imageUrl: '',
     inStock: true,
     embroideryType: 'Machine'
   });
+
+  const getImageSrc = (product) => {
+    if (product?.imageData && product?.contentType) {
+      return `data:${product.contentType};base64,${product.imageData}`;
+    }
+    return product?.imageUrl || 'https://via.placeholder.com/150?text=No+Image';
+  };
+
+  const normalizeDescription = (desc) => {
+    if (!desc) {
+      return { en: '', fr: '', sq: '' };
+    }
+    if (typeof desc === 'string') {
+      return { en: desc, fr: desc, sq: desc };
+    }
+    return {
+      en: desc.en || '',
+      fr: desc.fr || '',
+      sq: desc.sq || ''
+    };
+  }; 
 
   useEffect(() => {
     if (authorized) {
@@ -72,15 +93,14 @@ function ProductManagement() {
       setCurrentProduct(product);
       setFormData({
         name: product.name,
-        description: product.description,
+        description: normalizeDescription(product.description),
         price: product.price,
         category: product.category,
-        imageUrl: product.imageUrl,
         inStock: product.inStock,
         embroideryType: product.embroideryType
       });
+      setImagePreview(getImageSrc(product));
       setImageFile(null);
-      setImagePreview(product.imageUrl || (product.imageData ? `data:${product.contentType};base64,${product.imageData}` : null));
     } else {
       setEditMode(false);
       setCurrentProduct(null);
@@ -93,12 +113,11 @@ function ProductManagement() {
         },
         price: '',
         category: '',
-        imageUrl: '',
         inStock: true,
         embroideryType: 'Machine'
       });
       setImageFile(null);
-      setImagePreview(null);
+      setImagePreview('');
     }
     setShowModal(true);
   };
@@ -108,7 +127,7 @@ function ProductManagement() {
     setEditMode(false);
     setCurrentProduct(null);
     setImageFile(null);
-    setImagePreview(null);
+    setImagePreview('');
   };
 
   const handleChange = (e) => {
@@ -119,17 +138,10 @@ function ProductManagement() {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      showAlertMessage('Image must be less than 5MB', 'danger');
-      return;
-    }
-    setImageFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => setImagePreview(reader.result);
-    reader.readAsDataURL(file);
+  const handleFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    setImageFile(file || null);
+    setImagePreview(file ? URL.createObjectURL(file) : '');
   };
 
   const handleSubmit = async (e) => {
@@ -149,31 +161,30 @@ function ProductManagement() {
       return;
     }
 
+    if (!editMode && !imageFile) {
+      showAlertMessage('Please upload an image file', 'danger');
+      return;
+    }
+
+    const payload = new FormData();
+    payload.append('name', formData.name);
+    payload.append('description', JSON.stringify(formData.description));
+    payload.append('price', formData.price);
+    payload.append('category', formData.category);
+    payload.append('inStock', formData.inStock);
+    payload.append('embroideryType', formData.embroideryType);
+    if (imageFile) {
+      payload.append('image', imageFile);
+    }
+
     try {
-      const submitData = new FormData();
-      submitData.append('name', formData.name);
-      submitData.append('description', JSON.stringify(formData.description));
-      submitData.append('price', formData.price);
-      submitData.append('category', formData.category);
-      submitData.append('inStock', formData.inStock);
-      submitData.append('embroideryType', formData.embroideryType);
-
-      if (imageFile) {
-        submitData.append('image', imageFile);
-      }
-
-      if (!editMode && !imageFile) {
-        showAlertMessage('Please upload an image file', 'danger');
-        return;
-      }
-
       if (editMode) {
-        await api.put(`/products/${currentProduct._id}`, submitData, {
+        await api.put(`/products/${currentProduct._id}`, payload, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         showAlertMessage(t('productUpdated'), 'success');
       } else {
-        await api.post('/products', submitData, {
+        await api.post('/products', payload, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         showAlertMessage(t('productCreated'), 'success');
@@ -288,18 +299,20 @@ function ProductManagement() {
           <Col>
             <div className="page-header">
               <h1 className="admin-title">{t('productManagement')}</h1>
-              <Button 
-                variant="warning" 
-                size="lg" 
-                onClick={() => handleShowModal()}
-                className="add-product-btn"
-              >
-                <i className="fas fa-plus me-2"></i>
-                {t('addNewProduct')}
-              </Button>
-              <Button variant="secondary" onClick={handleSignOut} className="ms-2">
-                {t('signOut')}
-              </Button>
+              <div className="header-buttons">
+                <Button 
+                  variant="warning" 
+                  size="lg" 
+                  onClick={() => handleShowModal()}
+                  className="add-product-btn"
+                >
+                  <i className="fas fa-plus me-2"></i>
+                  {t('addNewProduct')}
+                </Button>
+                <Button as={Link} to="/admin" variant="outline-secondary" className="ms-2">
+                  Back to Dashboard
+                </Button>
+              </div>
             </div>
           </Col>
         </Row>
@@ -341,10 +354,10 @@ function ProductManagement() {
                       </tr>
                     ) : (
                       products.map(product => (
-                        <tr key={product._id}>
+                        <tr key={product._id} className={`${product.inStock === 0 ? 'stock-out' : product.inStock < 5 ? 'stock-low' : ''}`}>
                           <td>
                             <img 
-                              src={product.imageUrl || (product.imageData ? `data:${product.contentType};base64,${product.imageData}` : '/placeholder.jpg')} 
+                              src={getImageSrc(product)} 
                               alt={product.name}
                               className="table-image"
                             />
@@ -355,8 +368,8 @@ function ProductManagement() {
                           <td>{product.category}</td>
                           <td>{product.embroideryType}</td>
                           <td>
-                            <span className={`badge ${product.inStock ? 'bg-success' : 'bg-danger'}`}>
-                              {product.inStock ? t('inStockLabel') : t('outOfStockLabel')}
+                            <span className={`badge ${product.inStock > 0 ? 'bg-success' : 'bg-danger'}`}>
+                              {product.inStock > 0 ? `${t('inStockLabel')} (${product.inStock})` : t('outOfStockLabel')}
                             </span>
                           </td>
                           <td>
@@ -504,26 +517,20 @@ function ProductManagement() {
               </Row>
 
               <Form.Group className="mb-3">
-                <Form.Label>{t('image')} Upload</Form.Label>
+                <Form.Label>{t('image')} *</Form.Label>
                 <Form.Control
                   type="file"
                   accept="image/*"
-                  onChange={handleImageChange}
+                  onChange={handleFileChange}
+                  required={!editMode}
                 />
-                <Form.Text className="text-muted">
-                  Upload an image (max 5MB) or provide a URL below.
-                </Form.Text>
                 {imagePreview && (
-                  <div className="mt-2">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
-                    />
+                  <div className="mt-3 d-flex align-items-center gap-3">
+                    <img src={imagePreview} alt="Preview" className="table-image" />
+                    <span className="text-muted small">Preview</span>
                   </div>
                 )}
               </Form.Group>
-
 
               <Form.Group className="mb-3">
                 <Form.Check

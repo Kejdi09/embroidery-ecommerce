@@ -1,39 +1,26 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
+const router = express.Router();
 const Product = require('../models/Product');
 
-// Configure multer for memory storage
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'), false);
-    }
-  }
-});
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Validation middleware
 const validateProductInput = (req, res, next) => {
-  // If multipart form sent description as JSON string, parse it
-  if (req.body.description && typeof req.body.description === 'string') {
-    try {
-      req.body.description = JSON.parse(req.body.description);
-    } catch (e) {
-      // leave as-is if parsing fails
-    }
-  }
-
-  const { name, description, price, category, imageUrl } = req.body;
-  const hasFile = req.file;
+  const { name, price, category } = req.body;
+  let description = req.body.description;
   
   const errors = [];
+
+  // Accept JSON string payloads from multipart/form-data
+  if (typeof description === 'string') {
+    try {
+      description = JSON.parse(description);
+      req.body.description = description;
+    } catch (e) {
+      errors.push('Description must be valid JSON');
+    }
+  }
   
   if (!name || name.trim().length < 3) {
     errors.push('Product name must be at least 3 characters');
@@ -60,53 +47,45 @@ const validateProductInput = (req, res, next) => {
   if (!category || category.trim().length === 0) {
     errors.push('Category is required');
   }
-  // Image is required for create; on update it's optional
-  if (req.method !== 'PUT') {
-    if (!hasFile) {
-      errors.push('Uploaded image is required');
+  // On create, require an image file
+  if (req.method === 'POST') {
+    if (!req.file) {
+      errors.push('Image file is required');
     }
   }
   
   if (errors.length > 0) {
     console.error('Validation errors:', errors);
-    console.error('Received data:', { name, description, price, category, imageUrl });
+    console.error('Received data:', { name, description, price, category, hasFile: !!req.file });
     return res.status(400).json({ success: false, errors });
   }
   
   next();
 };
 
-// Helper function to validate URL
-const isValidUrl = (string) => {
-  try {
-    new URL(string);
-    return true;
-  } catch (_) {
-    return false;
-  }
-};
-
 // CREATE - Add new product
 router.post('/', upload.single('image'), validateProductInput, async (req, res) => {
   try {
-    const productData = {
-      ...req.body,
-      price: parseFloat(req.body.price)
-    };
+    const description = typeof req.body.description === 'string'
+      ? JSON.parse(req.body.description)
+      : req.body.description;
 
-    // If file uploaded, convert to base64
-    if (req.file) {
-      productData.imageData = req.file.buffer.toString('base64');
-      productData.contentType = req.file.mimetype;
-      delete productData.imageUrl; // Don't use URL if file uploaded
-    }
-
-    const product = new Product(productData);
+    const product = new Product({
+      name: req.body.name,
+      description,
+      price: parseFloat(req.body.price),
+      category: req.body.category,
+      inStock: req.body.inStock !== 'false' && req.body.inStock !== false,
+      embroideryType: req.body.embroideryType || 'Machine',
+      imageUrl: req.body.imageUrl || null,
+      imageData: req.file ? req.file.buffer : undefined,
+      contentType: req.file ? req.file.mimetype : undefined
+    });
     const savedProduct = await product.save();
     res.status(201).json({
       success: true,
       message: 'Product created successfully',
-      data: savedProduct
+      data: serializeProduct(savedProduct)
     });
   } catch (error) {
     res.status(500).json({
@@ -179,7 +158,7 @@ router.get('/', async (req, res) => {
     
     res.json({
       success: true,
-      data: products,
+      data: products.map(serializeProduct),
       pagination: {
         total,
         page: pageNum,
@@ -225,7 +204,7 @@ router.get('/:id', async (req, res) => {
     }
     res.json({
       success: true,
-      data: product
+      data: serializeProduct(product)
     });
   } catch (error) {
     if (error.kind === 'ObjectId') {
@@ -245,21 +224,31 @@ router.get('/:id', async (req, res) => {
 // UPDATE - Update product by ID
 router.put('/:id', upload.single('image'), validateProductInput, async (req, res) => {
   try {
-    const updateData = {
-      ...req.body,
-      price: parseFloat(req.body.price)
+    const description = typeof req.body.description === 'string'
+      ? JSON.parse(req.body.description)
+      : req.body.description;
+
+    const update = {
+      name: req.body.name,
+      description,
+      price: parseFloat(req.body.price),
+      category: req.body.category,
+      inStock: req.body.inStock !== 'false' && req.body.inStock !== false,
+      embroideryType: req.body.embroideryType || 'Machine'
     };
 
-    // If file uploaded, convert to base64
+    if (typeof req.body.imageUrl !== 'undefined') {
+      update.imageUrl = req.body.imageUrl || null;
+    }
+
     if (req.file) {
-      updateData.imageData = req.file.buffer.toString('base64');
-      updateData.contentType = req.file.mimetype;
-      updateData.imageUrl = undefined; // Clear URL if new file uploaded
+      update.imageData = req.file.buffer;
+      update.contentType = req.file.mimetype;
     }
 
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      updateData,
+      update,
       { new: true, runValidators: true }
     );
     if (!product) {
@@ -271,7 +260,7 @@ router.put('/:id', upload.single('image'), validateProductInput, async (req, res
     res.json({
       success: true,
       message: 'Product updated successfully',
-      data: product
+      data: serializeProduct(product)
     });
   } catch (error) {
     if (error.kind === 'ObjectId') {
@@ -301,7 +290,7 @@ router.delete('/:id', async (req, res) => {
     res.json({
       success: true,
       message: 'Product deleted successfully',
-      data: product
+      data: serializeProduct(product)
     });
   } catch (error) {
     if (error.kind === 'ObjectId') {
@@ -317,5 +306,14 @@ router.delete('/:id', async (req, res) => {
     });
   }
 });
+
+function serializeProduct(product) {
+  if (!product) return product;
+  const obj = product.toObject({ getters: true, virtuals: false });
+  if (obj.imageData) {
+    obj.imageData = obj.imageData.toString('base64');
+  }
+  return obj;
+}
 
 module.exports = router;

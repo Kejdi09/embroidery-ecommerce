@@ -18,6 +18,13 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
 
+  const getImageSrc = (item) => {
+    if (item?.imageData && item?.contentType) {
+      return `data:${item.contentType};base64,${item.imageData}`;
+    }
+    return item?.imageUrl || 'https://via.placeholder.com/400?text=No+Image';
+  };
+
   useEffect(() => {
     fetchProduct();
   }, [id]);
@@ -78,7 +85,7 @@ function ProductDetail() {
             <div className="image-frame">
               <div className="image-background"></div>
               <div className="product-image-wrapper">
-                <img src={product.imageUrl || (product.imageData ? `data:${product.contentType};base64,${product.imageData}` : '/placeholder.jpg')} alt={product.name} className="product-image-display" />
+                <img src={getImageSrc(product)} alt={product.name} className="product-image-display" />
               </div>
             </div>
           </Col>

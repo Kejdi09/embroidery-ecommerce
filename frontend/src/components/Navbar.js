@@ -41,9 +41,6 @@ function Navigation() {
             <Nav.Link as={Link} to="/admin" className="nav-link-custom admin-link">
               {t('admin')}
             </Nav.Link>
-            <Nav.Link as={Link} to="/admin/images" className="nav-link-custom admin-link">
-              Site Images
-            </Nav.Link>
           </Nav>
           <div className="ms-3">
             <LanguageSwitcher />
