@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//trigger
+
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/embroidery_db')
 .then(() => console.log('MongoDB Connected Successfully'))
@@ -21,11 +21,13 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/embroider
 const productRoutes = require('./routes/productRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const imageRoutes = require('./routes/imageRoutes');
+const teamRoutes = require('./routes/teamRoutes');
 
 // Use Routes
 app.use('/api/products', productRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/images', imageRoutes);
+app.use('/api/team', teamRoutes);
 
 // Root Route
 app.get('/', (req, res) => {

@@ -175,6 +175,30 @@ router.get('/', async (req, res) => {
   }
 });
 
+// READ - Get stock alerts (low-stock and out-of-stock counts)
+router.get('/alerts/stock', async (req, res) => {
+  try {
+    const products = await Product.find({});
+    const outOfStock = products.filter(p => p.inStock === 0).length;
+    const lowStock = products.filter(p => p.inStock > 0 && p.inStock < 5).length;
+    
+    res.json({
+      success: true,
+      data: {
+        outOfStock,
+        lowStock,
+        total: outOfStock + lowStock
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching stock alerts',
+      error: error.message
+    });
+  }
+});
+
 // READ - Get product categories
 router.get('/categories/list', async (req, res) => {
   try {

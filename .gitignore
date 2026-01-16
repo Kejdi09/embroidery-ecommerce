@@ -1,11 +1,15 @@
-# Environment variables
+# Environment variables - NEVER COMMIT
 .env
 .env.local
 .env.*.local
+.env.production
+.env.test
 
 # Dependencies
 node_modules/
 *.npm
+package-lock.json
+yarn.lock
 
 # Logs
 logs/
@@ -33,3 +37,23 @@ Thumbs.db
 # Cache
 .eslintcache
 .stylelintcache
+
+# Testing
+/coverage
+.nyc_output
+
+# Temporary files
+*.tmp
+.temp/
+
+# Database files (if using local SQLite, etc.)
+*.db
+*.sqlite
+*.sqlite3
+
+# Security
+# Credential files, API keys, etc.
+*.key
+*.pem
+secrets/
+credentials/
