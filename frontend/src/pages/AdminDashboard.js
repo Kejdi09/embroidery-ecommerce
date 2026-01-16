@@ -246,10 +246,12 @@ function AdminDashboard() {
           </Col>
 
           {/* Statistics */}
-          <Col md={6} lg={4}> position-relative">
+          <Col md={6} lg={4}>
+            <div className="position-relative">
                 {stats.stockAlerts > 0 && (
                   <span className="alert-badge">{stats.stockAlerts}</span>
                 )}
+            </div>
             <Card className="nav-card statistics-card h-100">
               <Card.Body className="d-flex flex-column">
                 <div className="card-icon">
