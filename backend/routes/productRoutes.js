@@ -1,10 +1,28 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const Product = require('../models/Product');
+
+// Configure multer for memory storage
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  }
+});
 
 // Validation middleware
 const validateProductInput = (req, res, next) => {
   const { name, description, price, category, imageUrl } = req.body;
+  const hasFile = req.file;
   
   const errors = [];
   
@@ -33,8 +51,12 @@ const validateProductInput = (req, res, next) => {
   if (!category || category.trim().length === 0) {
     errors.push('Category is required');
   }
-  if (!imageUrl || !isValidUrl(imageUrl)) {
-    errors.push('Valid image URL is required');
+  // Image is required but can be either URL or file upload
+  if (!imageUrl && !hasFile) {
+    errors.push('Image URL or uploaded image is required');
+  }
+  if (imageUrl && !isValidUrl(imageUrl)) {
+    errors.push('Image URL must be a valid URL');
   }
   
   if (errors.length > 0) {
@@ -57,12 +79,21 @@ const isValidUrl = (string) => {
 };
 
 // CREATE - Add new product
-router.post('/', validateProductInput, async (req, res) => {
+router.post('/', upload.single('image'), validateProductInput, async (req, res) => {
   try {
-    const product = new Product({
+    const productData = {
       ...req.body,
       price: parseFloat(req.body.price)
-    });
+    };
+
+    // If file uploaded, convert to base64
+    if (req.file) {
+      productData.imageData = req.file.buffer.toString('base64');
+      productData.contentType = req.file.mimetype;
+      delete productData.imageUrl; // Don't use URL if file uploaded
+    }
+
+    const product = new Product(productData);
     const savedProduct = await product.save();
     res.status(201).json({
       success: true,
@@ -204,11 +235,23 @@ router.get('/:id', async (req, res) => {
 });
 
 // UPDATE - Update product by ID
-router.put('/:id', validateProductInput, async (req, res) => {
+router.put('/:id', upload.single('image'), validateProductInput, async (req, res) => {
   try {
+    const updateData = {
+      ...req.body,
+      price: parseFloat(req.body.price)
+    };
+
+    // If file uploaded, convert to base64
+    if (req.file) {
+      updateData.imageData = req.file.buffer.toString('base64');
+      updateData.contentType = req.file.mimetype;
+      updateData.imageUrl = undefined; // Clear URL if new file uploaded
+    }
+
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { ...req.body, price: parseFloat(req.body.price) },
+      updateData,
       { new: true, runValidators: true }
     );
     if (!product) {
