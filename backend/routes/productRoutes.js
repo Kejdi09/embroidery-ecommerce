@@ -75,7 +75,7 @@ router.post('/', upload.single('image'), validateProductInput, async (req, res) 
       description,
       price: parseFloat(req.body.price),
       category: req.body.category,
-      inStock: req.body.inStock !== 'false' && req.body.inStock !== false,
+      inStock: parseInt(req.body.inStock) || 0,
       embroideryType: req.body.embroideryType || 'Machine',
       imageUrl: req.body.imageUrl || null,
       imageData: req.file ? req.file.buffer : undefined,
@@ -233,7 +233,7 @@ router.put('/:id', upload.single('image'), validateProductInput, async (req, res
       description,
       price: parseFloat(req.body.price),
       category: req.body.category,
-      inStock: req.body.inStock !== 'false' && req.body.inStock !== false,
+      inStock: parseInt(req.body.inStock) || 0,
       embroideryType: req.body.embroideryType || 'Machine'
     };
 

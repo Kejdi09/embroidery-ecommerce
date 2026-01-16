@@ -41,8 +41,9 @@ const productSchema = new mongoose.Schema({
     type: String
   },
   inStock: {
-    type: Boolean,
-    default: true
+    type: Number,
+    default: 0,
+    min: 0
   },
   embroideryType: {
     type: String,

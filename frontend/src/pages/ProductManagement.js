@@ -32,7 +32,7 @@ function ProductManagement() {
     },
     price: '',
     category: '',
-    inStock: true,
+    inStock: 0,
     embroideryType: 'Machine'
   });
 
@@ -134,7 +134,7 @@ function ProductManagement() {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: name === 'inStock' ? parseInt(value) || 0 : (type === 'checkbox' ? checked : value)
     }));
   };
 
@@ -533,12 +533,14 @@ function ProductManagement() {
               </Form.Group>
 
               <Form.Group className="mb-3">
-                <Form.Check
-                  type="checkbox"
-                  label={t('inStockLabel')}
+                <Form.Label>{t('inStockLabel')} (Quantity)</Form.Label>
+                <Form.Control
+                  type="number"
                   name="inStock"
-                  checked={formData.inStock}
+                  value={formData.inStock}
                   onChange={handleChange}
+                  min="0"
+                  placeholder="Enter stock quantity"
                 />
               </Form.Group>
 

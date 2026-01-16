@@ -146,8 +146,8 @@ function Statistics() {
       });
       setError('');
     } catch (err) {
-      console.error('Failed to load statistics', err);
-      setError('Failed to load statistics');
+      console.error('Failed to load statistics:', err);
+      setError('Failed to load statistics. Please check the server connection.');
     } finally {
       setLoading(false);
     }
