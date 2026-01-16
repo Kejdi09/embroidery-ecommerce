@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import api from '../services/api';
 import './About.css';
 
 function About() {
   const { t } = useTranslation();
+  const [aboutHero, setAboutHero] = useState(null);
+  const [teamImages, setTeamImages] = useState({});
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const heroRes = await api.get('/images/location/about-hero');
+        setAboutHero(heroRes.data);
+      } catch (e) {
+        setAboutHero(null);
+      }
+      const teams = ['team-1', 'team-2', 'team-3'];
+      const results = {};
+      for (const loc of teams) {
+        try {
+          const res = await api.get(`/images/location/${loc}`);
+          results[loc] = res.data;
+        } catch (e) {
+          results[loc] = null;
+        }
+      }
+      setTeamImages(results);
+    };
+    load();
+  }, []);
 
   return (
     <div className="about-page">
@@ -21,7 +47,7 @@ function About() {
             <Col lg={6}>
               <div className="about-hero-image">
                 <img 
-                  src="https://images.unsplash.com/photo-1558769132-cb1aea1c8e5d?w=600" 
+                  src={aboutHero ? `data:${aboutHero.contentType};base64,${aboutHero.imageData}` : "https://images.unsplash.com/photo-1558769132-cb1aea1c8e5d?w=600"} 
                   alt="Embroidery Machine" 
                   className="img-fluid rounded-lg"
                 />
@@ -123,7 +149,7 @@ function About() {
               <Card className="team-card">
                 <div className="team-image-wrapper">
                   <img 
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400" 
+                    src={teamImages['team-1'] ? `data:${teamImages['team-1'].contentType};base64,${teamImages['team-1'].imageData}` : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400"} 
                     alt="Team Member" 
                     className="team-image"
                   />
@@ -141,7 +167,7 @@ function About() {
               <Card className="team-card">
                 <div className="team-image-wrapper">
                   <img 
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" 
+                    src={teamImages['team-2'] ? `data:${teamImages['team-2'].contentType};base64,${teamImages['team-2'].imageData}` : "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"} 
                     alt="Team Member" 
                     className="team-image"
                   />
@@ -159,7 +185,7 @@ function About() {
               <Card className="team-card">
                 <div className="team-image-wrapper">
                   <img 
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400" 
+                    src={teamImages['team-3'] ? `data:${teamImages['team-3'].contentType};base64,${teamImages['team-3'].imageData}` : "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400"} 
                     alt="Team Member" 
                     className="team-image"
                   />

@@ -78,7 +78,7 @@ function ProductDetail() {
             <div className="image-frame">
               <div className="image-background"></div>
               <div className="product-image-wrapper">
-                <img src={product.imageUrl} alt={product.name} className="product-image-display" />
+                <img src={product.imageUrl || (product.imageData ? `data:${product.contentType};base64,${product.imageData}` : '/placeholder.jpg')} alt={product.name} className="product-image-display" />
               </div>
             </div>
           </Col>

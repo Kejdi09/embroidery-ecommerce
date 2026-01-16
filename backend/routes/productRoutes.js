@@ -21,6 +21,15 @@ const upload = multer({
 
 // Validation middleware
 const validateProductInput = (req, res, next) => {
+  // If multipart form sent description as JSON string, parse it
+  if (req.body.description && typeof req.body.description === 'string') {
+    try {
+      req.body.description = JSON.parse(req.body.description);
+    } catch (e) {
+      // leave as-is if parsing fails
+    }
+  }
+
   const { name, description, price, category, imageUrl } = req.body;
   const hasFile = req.file;
   
@@ -51,12 +60,11 @@ const validateProductInput = (req, res, next) => {
   if (!category || category.trim().length === 0) {
     errors.push('Category is required');
   }
-  // Image is required but can be either URL or file upload
-  if (!imageUrl && !hasFile) {
-    errors.push('Image URL or uploaded image is required');
-  }
-  if (imageUrl && !isValidUrl(imageUrl)) {
-    errors.push('Image URL must be a valid URL');
+  // Image is required for create; on update it's optional
+  if (req.method !== 'PUT') {
+    if (!hasFile) {
+      errors.push('Uploaded image is required');
+    }
   }
   
   if (errors.length > 0) {

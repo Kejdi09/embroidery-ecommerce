@@ -10,10 +10,21 @@ function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorKey, setErrorKey] = useState('');
+  const [heroImage, setHeroImage] = useState(null);
 
   useEffect(() => {
     fetchProducts();
+    fetchHeroImage();
   }, []);
+
+  const fetchHeroImage = async () => {
+    try {
+      const res = await api.get('/images/location/hero');
+      setHeroImage(res.data);
+    } catch (err) {
+      setHeroImage(null);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -51,7 +62,7 @@ function Home() {
             <Col lg={6} className="hero-image-col">
               <div className="hero-image-wrapper">
                 <img 
-                  src="https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=600" 
+                  src={heroImage ? `data:${heroImage.contentType};base64,${heroImage.imageData}` : "https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=600"} 
                   alt="Embroidery" 
                   className="hero-image"
                 />
@@ -94,7 +105,7 @@ function Home() {
                       <div className="product-image-wrapper">
                         <Card.Img 
                           variant="top" 
-                          src={product.imageUrl} 
+                          src={product.imageUrl || (product.imageData ? `data:${product.contentType};base64,${product.imageData}` : '/placeholder.jpg')} 
                           alt={product.name}
                           className="product-image"
                           style={{ cursor: 'pointer' }}

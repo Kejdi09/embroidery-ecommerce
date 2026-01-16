@@ -16,6 +16,8 @@ function ProductManagement() {
   const [alertVariant, setAlertVariant] = useState('success');
   const [authorized, setAuthorized] = useState(() => localStorage.getItem('adminAuthorized') === 'true');
   const [credentials, setCredentials] = useState({ username: '', code: '' });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const ACCESS_USERNAME = 'admin';
   const ACCESS_CODE = '2468';
@@ -77,6 +79,8 @@ function ProductManagement() {
         inStock: product.inStock,
         embroideryType: product.embroideryType
       });
+      setImageFile(null);
+      setImagePreview(product.imageUrl || (product.imageData ? `data:${product.contentType};base64,${product.imageData}` : null));
     } else {
       setEditMode(false);
       setCurrentProduct(null);
@@ -93,6 +97,8 @@ function ProductManagement() {
         inStock: true,
         embroideryType: 'Machine'
       });
+      setImageFile(null);
+      setImagePreview(null);
     }
     setShowModal(true);
   };
@@ -101,6 +107,8 @@ function ProductManagement() {
     setShowModal(false);
     setEditMode(false);
     setCurrentProduct(null);
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const handleChange = (e) => {
@@ -109,6 +117,19 @@ function ProductManagement() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      showAlertMessage('Image must be less than 5MB', 'danger');
+      return;
+    }
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setImagePreview(reader.result);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -128,15 +149,33 @@ function ProductManagement() {
       return;
     }
 
-    // Log the data being sent for debugging
-    console.log('Sending product data:', formData);
-
     try {
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      submitData.append('description', JSON.stringify(formData.description));
+      submitData.append('price', formData.price);
+      submitData.append('category', formData.category);
+      submitData.append('inStock', formData.inStock);
+      submitData.append('embroideryType', formData.embroideryType);
+
+      if (imageFile) {
+        submitData.append('image', imageFile);
+      }
+
+      if (!editMode && !imageFile) {
+        showAlertMessage('Please upload an image file', 'danger');
+        return;
+      }
+
       if (editMode) {
-        await api.put(`/products/${currentProduct._id}`, formData);
+        await api.put(`/products/${currentProduct._id}`, submitData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         showAlertMessage(t('productUpdated'), 'success');
       } else {
-        await api.post('/products', formData);
+        await api.post('/products', submitData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         showAlertMessage(t('productCreated'), 'success');
       }
       
@@ -305,7 +344,7 @@ function ProductManagement() {
                         <tr key={product._id}>
                           <td>
                             <img 
-                              src={product.imageUrl} 
+                              src={product.imageUrl || (product.imageData ? `data:${product.contentType};base64,${product.imageData}` : '/placeholder.jpg')} 
                               alt={product.name}
                               className="table-image"
                             />
@@ -465,16 +504,26 @@ function ProductManagement() {
               </Row>
 
               <Form.Group className="mb-3">
-                <Form.Label>{t('image')} URL *</Form.Label>
+                <Form.Label>{t('image')} Upload</Form.Label>
                 <Form.Control
-                  type="url"
-                  name="imageUrl"
-                  value={formData.imageUrl}
-                  onChange={handleChange}
-                  required
-                  placeholder="https://example.com/image.jpg"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
                 />
+                <Form.Text className="text-muted">
+                  Upload an image (max 5MB) or provide a URL below.
+                </Form.Text>
+                {imagePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'cover' }}
+                    />
+                  </div>
+                )}
               </Form.Group>
+
 
               <Form.Group className="mb-3">
                 <Form.Check
