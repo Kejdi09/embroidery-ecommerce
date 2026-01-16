@@ -1,4 +1,3 @@
 {
-  "root": "frontend",
-  "buildCommand": "npm run build --legacy-peer-deps"
+  "root": "frontend"
 }
