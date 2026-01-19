@@ -54,13 +54,13 @@ function Footer() {
             <div className="footer-contact">
               <p><i className="fas fa-envelope me-2"></i> {t('infoEmail')}</p>
               <p><i className="fas fa-phone me-2"></i> {t('infoPhone')}</p>
-              <p><i className="fas fa-map-marker-alt me-2"></i> {t('infoAddress')}</p>
+              <p><i className="fas fa-globe me-2"></i> {t('onlineStoreDesc')}</p>
             </div>
             <div className="social-icons mt-3">
-              <a href="#facebook" className="social-icon"><i className="fab fa-facebook-f"></i></a>
-              <a href="#instagram" className="social-icon"><i className="fab fa-instagram"></i></a>
-              <a href="#twitter" className="social-icon"><i className="fab fa-twitter"></i></a>
-              <a href="#pinterest" className="social-icon"><i className="fab fa-pinterest"></i></a>
+              <a href="#facebook" className="social-icon" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
+              <a href="#instagram" className="social-icon" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
+              <a href="#whatsapp" className="social-icon" aria-label="WhatsApp"><i className="fab fa-whatsapp"></i></a>
+              <a href="#viber" className="social-icon" aria-label="Viber"><i className="fab fa-viber"></i></a>
             </div>
           </Col>
         </Row>

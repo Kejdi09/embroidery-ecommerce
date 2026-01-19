@@ -20,6 +20,12 @@ const resources = {
       heroTitle: 'Premium Machine Embroidery',
       heroSubtitle: 'Discover our exclusive collection of machine-embroidered clothing. Each piece is crafted with precision and care.',
       exploreCollection: 'Explore Collection',
+      handcraftedLabel: 'Handcrafted Excellence',
+      heroMainTitle: 'Embroidery Made with Care',
+      heroMainSubtitle: 'Discover our exclusive collection of handmade embroidered clothing. Each piece tells a unique story, crafted with precision, passion, and artistry.',
+      shopNow: 'Shop Now',
+      learnMore: 'Learn More',
+      scrollDown: 'Scroll Down',
       //
       // Products
       ourCollection: 'Our Collection',
@@ -52,6 +58,18 @@ const resources = {
       customDesignsDesc: 'Choose from hundreds of patterns or create your own unique design',
       premiumQuality: 'Premium Quality',
       premiumQualityDesc: 'Only the finest materials and threads for long-lasting, vibrant embroidery',
+      
+      // Crafting Process
+      craftingProcessTitle: 'Our Crafting Process',
+      craftingProcessSubtitle: 'From concept to completion, every piece is crafted with precision and care',
+      craftingStep1Title: 'Design & Sketching',
+      craftingStep1Desc: 'Our skilled designers create unique patterns and digitize them for precision embroidery, ensuring every detail is perfect.',
+      craftingStep2Title: 'Machine Stitching',
+      craftingStep2Desc: 'State-of-the-art embroidery machines bring designs to life with thousands of precise stitches per minute.',
+      craftingStep3Title: 'Hand Finishing',
+      craftingStep3Desc: 'Expert artisans carefully inspect and finish each piece, adding final touches that machines cannot replicate.',
+      craftingStep4Title: 'Quality Control & Packaging',
+      craftingStep4Desc: 'Every item undergoes rigorous quality checks before being beautifully packaged and prepared for delivery.',
       
       // Product Detail
       premiumQualityEmbroidery: 'Premium Quality Embroidery',
@@ -122,8 +140,12 @@ const resources = {
       // Contact Info
       contactInfo: 'Contact Info',
       infoEmail: 'info@embroiderystudio.com',
-      infoPhone: '+1 (555) 123-4567',
-      infoAddress: '123 Fashion Street, NY 10001',
+      infoPhone: '+355 69 123 4567',
+      onlineStore: 'Online Store',
+      onlineStoreDesc: 'We operate 100% online, serving customers across Albania',
+      delivery: 'Delivery',
+      deliveryInfo: 'Fast delivery throughout Albania within 2-3 business days',
+      followUs: 'Follow Us on Social Media',
       quickLinks: 'Quick Links',
       
       // Admin
@@ -182,6 +204,12 @@ const resources = {
       heroTitle: 'Broderie Prémiée par Machine',
       heroSubtitle: 'Découvrez notre collection exclusive de vêtements brodés. Chaque pièce est confectionnée avec précision et soin.',
       exploreCollection: 'Explorer la Collection',
+      handcraftedLabel: 'Excellence Artisanale',
+      heroMainTitle: 'Broderie Faite avec Soin',
+      heroMainSubtitle: 'Découvrez notre collection exclusive de vêtements brodés à la main. Chaque pièce raconte une histoire unique, confectionnée avec précision, passion et art.',
+      shopNow: 'Acheter Maintenant',
+      learnMore: 'En Savoir Plus',
+      scrollDown: 'Défiler Vers le Bas',
       
       // Products
       ourCollection: 'Notre Collection',
@@ -214,6 +242,18 @@ const resources = {
       customDesignsDesc: 'Choisissez parmi des centaines de motifs ou créez votre propre design unique',
       premiumQuality: 'Qualité Première',
       premiumQualityDesc: 'Seulement les meilleurs matériaux et fils pour une broderie durable et vibrante',
+      
+      // Crafting Process
+      craftingProcessTitle: 'Notre Processus de Fabrication',
+      craftingProcessSubtitle: 'Du concept à l\'achèvement, chaque pièce est confectionnée avec précision et soin',
+      craftingStep1Title: 'Conception & Croquis',
+      craftingStep1Desc: 'Nos designers qualifiés créent des motifs uniques et les numérisent pour une broderie précise, garantissant la perfection de chaque détail.',
+      craftingStep2Title: 'Couture Machine',
+      craftingStep2Desc: 'Des machines à broder de pointe donnent vie aux designs avec des milliers de points précis par minute.',
+      craftingStep3Title: 'Finition Manuelle',
+      craftingStep3Desc: 'Des artisans experts inspectent et finissent soigneusement chaque pièce, ajoutant des touches finales que les machines ne peuvent pas reproduire.',
+      craftingStep4Title: 'Contrôle Qualité & Emballage',
+      craftingStep4Desc: 'Chaque article subit des contrôles de qualité rigoureux avant d\'être magnifiquement emballé et préparé pour la livraison.',
       
       // Product Detail
       premiumQualityEmbroidery: 'Broderie de Qualité Premium',
@@ -284,8 +324,12 @@ const resources = {
       // Contact Info
       contactInfo: 'Informations de Contact',
       infoEmail: 'info@embroiderystudio.com',
-      infoPhone: '+1 (555) 123-4567',
-      infoAddress: '123 Fashion Street, NY 10001',
+      infoPhone: '+355 69 123 4567',
+      onlineStore: 'Boutique en Ligne',
+      onlineStoreDesc: 'Nous opérons 100% en ligne, au service des clients à travers l\'Albanie',
+      delivery: 'Livraison',
+      deliveryInfo: 'Livraison rapide dans toute l\'Albanie sous 2-3 jours ouvrables',
+      followUs: 'Suivez-nous sur les Réseaux Sociaux',
       quickLinks: 'Liens Rapides',
       
       // Admin
@@ -341,6 +385,12 @@ const resources = {
       heroTitle: 'Qëndisje makinerike premium',
       heroSubtitle: 'Zbuloni koleksionin tonë ekskluziv të veshjeve të qëndisura me makinë. Çdo pjesë është punuar me kujdes dhe saktësi.',
       exploreCollection: 'Shfleto Koleksionin',
+      handcraftedLabel: 'Përsosmëri Artizanale',
+      heroMainTitle: 'Qëndisje të Bëra me Kujdes',
+      heroMainSubtitle: 'Zbuloni koleksionin tonë ekskluziv të veshjeve të qëndisura me dorë. Çdo copë tregon një histori unike, punuar me saktësi, pasion dhe art.',
+      shopNow: 'Blej Tani',
+      learnMore: 'Mëso Më Shumë',
+      scrollDown: 'Rrëshqit Poshtë',
       
       // Products
       ourCollection: 'Koleksioni Ynë',
@@ -373,6 +423,18 @@ const resources = {
       customDesignsDesc: 'Zgjidh nga qindra modele ose krijo dizajnin tënd unik',
       premiumQuality: 'Cilësi e lartë',
       premiumQualityDesc: 'Materiale dhe fije cilësore për qëndrueshmëri dhe ngjyra të forta',
+      
+      // Crafting Process
+      craftingProcessTitle: 'Procesi Ynë i Prodhimit',
+      craftingProcessSubtitle: 'Nga koncepti deri te përfundimi, çdo pjesë prodhohet me saktësi dhe kujdes',
+      craftingStep1Title: 'Dizajnimi & Skicimi',
+      craftingStep1Desc: 'Dizajnerët tanë të aftë krijojnë modele unike dhe i dixhitalizojnë ato për qëndisje të saktë, duke siguruar që çdo detaj të jetë i përsosur.',
+      craftingStep2Title: 'Qëndisja me Makinë',
+      craftingStep2Desc: 'Makinat më moderne të qëndisjes i japin jetë dizajneve me mijëra pike të sakta në minutë.',
+      craftingStep3Title: 'Përfundimi me Dorë',
+      craftingStep3Desc: 'Artizanët ekspertë kontrollojnë dhe përfundojnë me kujdes çdo pjesë, duke shtuar prekje finale që makinat nuk mund t\'i riprodhojnë.',
+      craftingStep4Title: 'Kontrolli i Cilësisë & Paketimi',
+      craftingStep4Desc: 'Çdo artikull kalon kontrolle rigoroze cilësie para se të paketohet bukur dhe të përgatitet për dërgesë.',
       
       // Product Detail
       premiumQualityEmbroidery: 'Qëndisje Cilësore Premium',
@@ -443,8 +505,12 @@ const resources = {
       // Contact Info
       contactInfo: 'Informacion Kontakti',
       infoEmail: 'info@embroiderystudio.com',
-      infoPhone: '+1 (555) 123-4567',
-      infoAddress: '123 Fashion Street, NY 10001',
+      infoPhone: '+355 69 123 4567',
+      onlineStore: 'Dyqan Online',
+      onlineStoreDesc: 'Ne operojmë 100% online, duke shërbyer klientët në të gjithë Shqipërinë',
+      delivery: 'Dërgesa',
+      deliveryInfo: 'Dërgesa të shpejta në të gjithë Shqipërinë brenda 2-3 ditëve pune',
+      followUs: 'Na Ndiqni në Rrjetet Sociale',
       quickLinks: 'Lidhje të Shpejtë',
       
       // Admin

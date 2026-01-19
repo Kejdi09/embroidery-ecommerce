@@ -261,13 +261,14 @@ function Contact() {
               <Card className="contact-info-card mb-4">
                 <Card.Body>
                   <h3 className="info-title">{t('contactInfo')}</h3>
+
                   <div className="contact-info-item">
                     <div className="info-icon">
-                      <i className="fas fa-map-marker-alt"></i>
+                      <i className="fas fa-globe"></i>
                     </div>
                     <div className="info-content">
-                      <h5>Address</h5>
-                      <p>{t('infoAddress')}</p>
+                      <h5>{t('onlineStore')}</h5>
+                      <p>{t('onlineStoreDesc')}</p>
                     </div>
                   </div>
 
@@ -293,30 +294,32 @@ function Contact() {
 
                   <div className="contact-info-item">
                     <div className="info-icon">
-                      <i className="fas fa-clock"></i>
+                      <i className="fas fa-shipping-fast"></i>
                     </div>
                     <div className="info-content">
-                      <h5>Business Hours</h5>
-                      <p>Monday - Friday: 9:00 AM - 6:00 PM<br />
-                         Saturday: 10:00 AM - 4:00 PM<br />
-                         Sunday: Closed</p>
+                      <h5>{t('delivery')}</h5>
+                      <p>{t('deliveryInfo')}</p>
                     </div>
                   </div>
                 </Card.Body>
               </Card>
 
-              <Card className="map-card">
-                <Card.Body className="p-0">
-                  <div className="map-placeholder">
-                    <iframe
-                      title="Location Map"
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30591910525!2d-74.25986548248684!3d40.697149422986005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1234567890123"
-                      width="100%"
-                      height="300"
-                      style={{ border: 0 }}
-                      allowFullScreen=""
-                      loading="lazy"
-                    ></iframe>
+              <Card className="social-card">
+                <Card.Body>
+                  <h3 className="info-title text-center mb-3">{t('followUs')}</h3>
+                  <div className="social-links">
+                    <a href="#" className="social-link facebook" aria-label="Facebook">
+                      <i className="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" className="social-link instagram" aria-label="Instagram">
+                      <i className="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" className="social-link whatsapp" aria-label="WhatsApp">
+                      <i className="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="#" className="social-link viber" aria-label="Viber">
+                      <i className="fab fa-viber"></i>
+                    </a>
                   </div>
                 </Card.Body>
               </Card>

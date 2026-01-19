@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Spinner, Alert } from 'react-bootstr
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../services/api';
+import CraftingProcess from '../components/CraftingProcess';
 import './Home.css';
 
 function Home() {
@@ -60,15 +61,23 @@ function Home() {
         <Container className="wide-container">
           <Row className="align-items-center">
             <Col lg={6} className="hero-content">
-              <h1 className="hero-title">{t('heroTitle')}</h1>
+              <span className="hero-label">{t('handcraftedLabel')}</span>
+              <h1 className="hero-title">{t('heroMainTitle')}</h1>
               <p className="hero-subtitle">
-                {t('heroSubtitle')}
+                {t('heroMainSubtitle')}
               </p>
-              <Link to="/">
-                <Button variant="primary" size="lg" className="hero-btn">
-                  {t('exploreCollection')}
-                </Button>
-              </Link>
+              <div className="hero-cta-group">
+                <Link to="/">
+                  <Button className="hero-cta-primary">
+                    {t('shopNow')}
+                  </Button>
+                </Link>
+                <Link to="/about">
+                  <Button className="hero-cta-secondary">
+                    {t('learnMore')}
+                  </Button>
+                </Link>
+              </div>
             </Col>
             <Col lg={6} className="hero-image-col">
               <div className="hero-image-wrapper">
@@ -111,15 +120,14 @@ function Home() {
             <Row className="g-4">
               {products.map((product) => (
                 <Col key={product._id} xs={12} sm={6} md={4} lg={3}>
-                  <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
-                    <Card className="product-card h-100">
+                  <Card className="product-card">
+                    <Link to={`/product/${product._id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', height: '100%' }}>
                       <div className="product-image-wrapper">
                         <Card.Img 
                           variant="top" 
                           src={getImageSrc(product)} 
                           alt={product.name}
                           className="product-image"
-                          style={{ cursor: 'pointer' }}
                         />
                         {product.inStock ? (
                           <span className="stock-badge in-stock">{t('inStock')}</span>
@@ -127,16 +135,16 @@ function Home() {
                           <span className="stock-badge out-stock">{t('outOfStock')}</span>
                         )}
                       </div>
-                      <Card.Body className="d-flex flex-column">
+                      <Card.Body>
                         <Card.Title className="product-title">{product.name}</Card.Title>
                         <Card.Text className="product-description">
-                        {typeof product.description === 'string' ? product.description : (product.description[i18n.language] || product.description.en)}
+                          {typeof product.description === 'string' ? product.description : (product.description[i18n.language] || product.description.en)}
                         </Card.Text>
                         <div className="product-meta">
                           <span className="product-category">{product.category}</span>
                           <span className="product-type">{product.embroideryType}</span>
                         </div>
-                        <div className="product-footer mt-auto">
+                        <div className="product-footer">
                           <span className="product-price">${product.price.toFixed(2)}</span>
                           <Button 
                             variant="primary" 
@@ -147,8 +155,8 @@ function Home() {
                           </Button>
                         </div>
                       </Card.Body>
-                    </Card>
-                  </Link>
+                    </Link>
+                  </Card>
                 </Col>
               ))}
             </Row>
@@ -156,38 +164,8 @@ function Home() {
         </Container>
       </section>
 
-      {/* Features Section */}
-      <section className="features-section">
-        <Container className="wide-container">
-          <div className="section-header">
-            <h2 className="section-title">{t('whyChooseUs')}</h2>
-            <p className="section-subtitle">{t('weOffer')}</p>
-          </div>
-          <Row className="g-4">
-            <Col md={4}>
-              <div className="feature-card">
-                <div className="feature-icon">✨</div>
-                <h4>{t('machinePrecision')}</h4>
-                <p>{t('machinePrecisionDesc')}</p>
-              </div>
-            </Col>
-            <Col md={4}>
-              <div className="feature-card">
-                <div className="feature-icon">🎨</div>
-                <h4>{t('customDesigns')}</h4>
-                <p>{t('customDesignsDesc')}</p>
-              </div>
-            </Col>
-            <Col md={4}>
-              <div className="feature-card">
-                <div className="feature-icon">⭐</div>
-                <h4>{t('premiumQuality')}</h4>
-                <p>{t('premiumQualityDesc')}</p>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </section>
+      {/* Crafting Process Carousel */}
+      <CraftingProcess />
     </div>
   );
 }
