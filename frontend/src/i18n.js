@@ -139,8 +139,8 @@ const resources = {
       
       // Contact Info
       contactInfo: 'Contact Info',
-      infoEmail: 'info@embroiderystudio.com',
-      infoPhone: '+355 69 123 4567',
+      infoEmail: 'info@example.com',
+      infoPhone: '+xxx xxx xxx xxxx',
       onlineStore: 'Online Store',
       onlineStoreDesc: 'We operate 100% online, serving customers across Albania',
       delivery: 'Delivery',
@@ -323,8 +323,8 @@ const resources = {
       
       // Contact Info
       contactInfo: 'Informations de Contact',
-      infoEmail: 'info@embroiderystudio.com',
-      infoPhone: '+355 69 123 4567',
+      infoEmail: 'info@example.com',
+      infoPhone: '+xxx xxx xxx xxxx',
       onlineStore: 'Boutique en Ligne',
       onlineStoreDesc: 'Nous opérons 100% en ligne, au service des clients à travers l\'Albanie',
       delivery: 'Livraison',
@@ -504,8 +504,8 @@ const resources = {
       
       // Contact Info
       contactInfo: 'Informacion Kontakti',
-      infoEmail: 'info@embroiderystudio.com',
-      infoPhone: '+355 69 123 4567',
+      infoEmail: 'info@example.com',
+      infoPhone: '+xxx xxx xxx xxxx',
       onlineStore: 'Dyqan Online',
       onlineStoreDesc: 'Ne operojmë 100% online, duke shërbyer klientët në të gjithë Shqipërinë',
       delivery: 'Dërgesa',
