@@ -1,4 +1,4 @@
-# 🧵 Embroidery E-Commerce
+# 🧵 Embroidery E-Commerce (NOT FINISHED)
 
 Full-stack MERN e-commerce platform for embroidered clothing with multilingual support (English, French, Albanian).
 
