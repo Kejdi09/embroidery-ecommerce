@@ -271,6 +271,9 @@
   border-radius: 6px;
   overflow: hidden;
   background: #fdfdfd;
+  border: none;
+  border-image: none;
+  box-shadow: none;
 }
 
 .product-image-wrapper::after {
