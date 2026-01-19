@@ -270,10 +270,7 @@
   aspect-ratio: 3 / 4;
   border-radius: 6px;
   overflow: hidden;
-  background: #fdfdfd;
-  border: none;
-  border-image: none;
-  box-shadow: none;
+  background: transparent;
 }
 
 .product-image-wrapper::after {
