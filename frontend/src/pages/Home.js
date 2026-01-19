@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, Button, Spinner, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,8 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [errorKey, setErrorKey] = useState('');
   const [heroImage, setHeroImage] = useState('https://images.unsplash.com/photo-1620799140188-3b2a02fd9a77?w=600');
+  const [showCarouselNav, setShowCarouselNav] = useState(false);
+  const productTrackRef = useRef(null);
 
   const getImageSrc = (item) => {
     if (item?.imageData && item?.contentType) {
@@ -19,6 +21,38 @@ function Home() {
     }
     return item?.imageUrl || 'https://via.placeholder.com/300?text=No+Image';
   };
+
+  const getDescription = (product) => {
+    if (!product?.description) return '';
+    if (typeof product.description === 'string') return product.description;
+    return product.description[i18n.language] || product.description.en || '';
+  };
+
+  const formatPrice = (price) => {
+    if (typeof price === 'number' && !Number.isNaN(price)) {
+      return `$${price.toFixed(2)}`;
+    }
+    return '—';
+  };
+
+  const scrollProducts = (direction = 1) => {
+    const node = productTrackRef.current;
+    if (!node) return;
+    const delta = direction * node.clientWidth * 0.75;
+    node.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      const node = productTrackRef.current;
+      if (!node) return;
+      setShowCarouselNav(node.scrollWidth > node.clientWidth + 8);
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [products]);
 
   useEffect(() => {
     fetchProducts();
@@ -117,49 +151,66 @@ function Home() {
               {t('noProducts')}
             </Alert>
           ) : (
-            <Row className="g-4">
-              {products.map((product) => (
-                <Col key={product._id} xs={12} sm={6} md={4} lg={3}>
-                  <Card className="product-card">
-                    <Link to={`/product/${product._id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                      <div className="product-image-wrapper">
-                        <Card.Img 
-                          variant="top" 
-                          src={getImageSrc(product)} 
-                          alt={product.name}
-                          className="product-image"
-                        />
-                        {product.inStock ? (
-                          <span className="stock-badge in-stock">{t('inStock')}</span>
-                        ) : (
-                          <span className="stock-badge out-stock">{t('outOfStock')}</span>
-                        )}
-                      </div>
-                      <Card.Body>
-                        <Card.Title className="product-title">{product.name}</Card.Title>
-                        <Card.Text className="product-description">
-                          {typeof product.description === 'string' ? product.description : (product.description[i18n.language] || product.description.en)}
-                        </Card.Text>
-                        <div className="product-meta">
-                          <span className="product-category">{product.category}</span>
-                          <span className="product-type">{product.embroideryType}</span>
-                        </div>
-                        <div className="product-footer">
-                          <span className="product-price">${product.price.toFixed(2)}</span>
-                          <Button 
-                            variant="primary" 
-                            size="sm" 
-                            className="view-btn"
-                          >
-                            {t('viewDetails')}
-                          </Button>
-                        </div>
-                      </Card.Body>
-                    </Link>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+            <div className="product-carousel">
+              {showCarouselNav && (
+                <div className="carousel-nav">
+                  <button className="carousel-btn" aria-label="Scroll left" onClick={() => scrollProducts(-1)}>
+                    ‹
+                  </button>
+                  <button className="carousel-btn" aria-label="Scroll right" onClick={() => scrollProducts(1)}>
+                    ›
+                  </button>
+                </div>
+              )}
+              <div className="product-track" ref={productTrackRef}>
+                {products.map((product) => {
+                  const descriptionText = getDescription(product);
+                  const priceText = formatPrice(product.price);
+                  return (
+                    <div key={product._id} className="product-slide">
+                      <Card className="product-card">
+                        <Link to={`/product/${product._id}`} className="product-card-link">
+                          <div className="product-image-wrapper">
+                            <Card.Img 
+                              variant="top" 
+                              src={getImageSrc(product)} 
+                              alt={product.name}
+                              className="product-image"
+                            />
+                            {product.inStock ? (
+                              <span className="stock-badge in-stock">{t('inStock')}</span>
+                            ) : (
+                              <span className="stock-badge out-stock">{t('outOfStock')}</span>
+                            )}
+                          </div>
+                          <Card.Body className="product-card-body">
+                            <Card.Title className="product-title">{product.name}</Card.Title>
+                            <Card.Text className="product-description">{descriptionText}</Card.Text>
+                            <div className="product-meta">
+                              {product.category && <span className="product-chip primary-chip">{product.category}</span>}
+                              {product.embroideryType && <span className="product-chip muted-chip">{product.embroideryType}</span>}
+                            </div>
+                            <div className="product-footer">
+                              <div className="price-block">
+                                <span className="price-label">{t('price')}</span>
+                                <span className="product-price">{priceText}</span>
+                              </div>
+                              <Button 
+                                variant="light" 
+                                size="sm" 
+                                className="view-btn"
+                              >
+                                {t('viewDetails')}
+                              </Button>
+                            </div>
+                          </Card.Body>
+                        </Link>
+                      </Card>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           )}
         </Container>
       </section>
